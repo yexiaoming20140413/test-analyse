@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chouti.analyse.mybatis.mapper.NewsMapper">
+    <insert id="insertRepeatNews">
+        <selectKey resultType="java.lang.Long" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into repeat_news (newsId,repeatId,createTime,updateTime,sameSource)
+        values (#{newsId},#{repeatId},#{createTime},#{updateTime},#{sameSource})
+    </insert>
+
+    <insert id="insertNewsHost">
+        <selectKey resultType="java.lang.Long" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into news_host (host,createTime,updateTime,weight)
+        values (#{host},#{createTime},#{updateTime},#{weight})
+    </insert>
+
+    <insert id="insertNewsTfidf">
+        <selectKey resultType="java.lang.Long" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into news_tfidf (newsId,tfidf,createTime,updateTime)
+        values (#{newsId},#{tfidf},#{createTime},#{updateTime})
+    </insert>
+
+
+    <update id="updateNewsSimHash">
+        update news set simhash=#{hash} where id=#{id}
+    </update>
+    <update id="updateNewsRepeat">
+        update news set echo=#{echo} where id=#{id}
+    </update>
+    <update id="updateNewsNohash">
+        update news set nohash=#{nohash} where id=#{id}
+    </update>
+    <update id="updateNewsCategory">
+        update news set categoryId=#{categoryId} where id=#{id}
+    </update>
+    <select id="queryNewsCountByTime" resultType="java.lang.Long">
+        select count(id) from news where echo = 0 and simhash != NULL
+        <if test="startTime != null">
+            and createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and createTime &lt;= #{endTime}
+        </if>
+    </select>
+    <select id="queryNewsByTimeAndPage" resultType="com.chouti.analyse.model.News">
+        select id,title,content,simhash from news where echo = 0 and simhash != NULL
+        <if test="startTime != null">
+            and createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and createTime &lt;= #{endTime}
+        </if>
+        limit #{start},#{size}
+    </select>
+    <select id="queryNoHashNewsList" resultType="com.chouti.analyse.model.News">
+        select id,url,title,content,createTime from news where 1=1 and nohash=0
+        <if test="startTime != null">
+            and createTime &gt;= #{startTime}
+        </if>
+        <if test="newsId != null">
+            and id &gt; #{newsId}
+        </if>
+        and simhash is null limit #{size}
+    </select>
+    <select id="queryNewsListByTimeAndId" resultType="com.chouti.analyse.model.News">
+        select id,simhash,createTime,content from news where 1=1
+        <if test="endTime != null">
+            and createTime &lt;= #{endTime}
+        </if>
+        <if test="newsId != null">
+            and id &lt; #{newsId}
+        </if>
+        order by id desc limit #{size}
+    </select>
+    <select id="queryRepeateNewsById" resultType="java.lang.Long">
+        select id from repeat_news where newsId=#{newsId} and repeatId=#{repeatId}
+    </select>
+    <select id="queryNewsById" resultType="com.chouti.analyse.model.News">
+        select * from news where id=#{id}
+    </select>
+    <select id="queryNewsHost" resultType="java.lang.Long">
+        select id from news_host where host=#{host}
+    </select>
+    <select id="queryNewsTfidf" resultType="com.chouti.analyse.model.NewsTfIdf">
+        select * from news_tfidf where 1=1
+        <if test="id != null">
+            and id &lt; #{id}
+        </if>
+        limit #{size}
+    </select>
+    <select id="queryCategoryList" resultType="com.chouti.analyse.model.NewsCategory">
+        select * from news_category
+    </select>
+</mapper>

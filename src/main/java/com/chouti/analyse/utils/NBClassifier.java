@@ -119,17 +119,17 @@ public class NBClassifier {
         for (Iterator iterator = wordFreMap.entrySet().iterator(); iterator.hasNext(); ) {
             Map.Entry entry = (Map.Entry) iterator.next();
             String key = (String) entry.getKey();
-            Long tmpCount = 0l;
+            double tmpCount = 0.0;
             Double weight = 1.0;
             if (positive) {
-//                System.out.println("word:" + key + "-nbcPositiveMap:" + nbcPositiveMap.get(key) + "-nbcNegativeMap:" + nbcNegativeMap.get(key) + "nbcPositiveMapCount:" + nbcPositeiveWordCount + "-nbcNegativeWordCount:" + nbcNegativeWordCount);
+                System.out.println("word:" + key + "-nbcPositiveMap:" + nbcPositiveMap.get(key) + "-nbcNegativeMap:" + nbcNegativeMap.get(key) + "nbcPositiveMapCount:" + nbcPositeiveWordCount + "-nbcNegativeWordCount:" + nbcNegativeWordCount);
 
             }
             if (docMap.containsKey(key)) {
-                tmpCount = (long) docMap.get(key);
+                tmpCount = (double) docMap.get(key);
             }
 
-            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.000000001) * weight / (classWordCount + 0.000000002);
+            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.00000000001) * weight / (classWordCount + 0.00000000002);
         }
         return probMatrixPerClass;
     }

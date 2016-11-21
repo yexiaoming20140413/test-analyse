@@ -254,6 +254,7 @@ public class SimhashManagerService {
         if (null == oriNews) {
             return;
         }
+
         Integer sameSource = 0;
         String newsHost = null;
         String oriHost = null;

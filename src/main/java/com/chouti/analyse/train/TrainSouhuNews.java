@@ -15,7 +15,7 @@ import java.util.*;
  *******************************************************************************/
 public class TrainSouhuNews {
     private static Logger logger = LoggerFactory.getLogger(TrainSouhuNews.class);
-    private static final String SOUGO_NEWS_FILE_PATH = "/home/xiaoming/newsLearn/news_fenlei/";
+    private static final String SOUGO_NEWS_FILE_PATH = "/home/xiaoming/newsLearn/news_train_souhu/";
 
     private static ChoutiSegment choutiSegment = new ChoutiSegment();
 

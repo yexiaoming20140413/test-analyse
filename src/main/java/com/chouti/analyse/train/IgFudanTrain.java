@@ -2,7 +2,6 @@ package com.chouti.analyse.train;
 
 import com.chouti.analyse.configure.CommonParams;
 import com.chouti.analyse.model.NbcWordsMap;
-import com.chouti.analyse.model.NewsCategory;
 import com.chouti.analyse.segment.ChoutiSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +15,10 @@ import java.util.*;
  * Contributors:
  * xiaoming  on 16-11-17.
  *******************************************************************************/
-public class IgTrain {
+public class IgFudanTrain {
 
-    private static Logger logger = LoggerFactory.getLogger(IgTrain.class);
-    private static final String SOUGO_NEWS_FILE_PATH = "/home/xiaoming/newsLearn/news_fenlei/";
+    private static Logger logger = LoggerFactory.getLogger(IgFudanTrain.class);
+    private static final String SOUGO_NEWS_FILE_PATH = "/home/xiaoming/newsLearn/news_train_fudan/";
 
     private static ChoutiSegment choutiSegment = new ChoutiSegment();
 
@@ -27,7 +26,7 @@ public class IgTrain {
 
     private static List<IgCategoryModel> igCategoryModelList = new ArrayList<>();
 
-    private static Integer CATEGORY_FEATURE_WORD_LEN=300;
+    private static Integer CATEGORY_FEATURE_WORD_LEN=500;
 
     private static List<NbcWordsMap> allCategoryWordList = new ArrayList<>();
 
@@ -35,19 +34,27 @@ public class IgTrain {
     public static void main(String args[]) throws Exception{
         logger.info("IG分类特征词选取开始");
         long startTime = System.currentTimeMillis();
-        categoryMap1.put("财经",1);
-        categoryMap1.put("传媒",2);
-        categoryMap1.put("教育",3);
-        categoryMap1.put("军事",4);
-        categoryMap1.put("汽车",5);
-        categoryMap1.put("体育",6);
-        categoryMap1.put("娱乐",7);
-        for(int i = 1;i <= categoryMap1.size();i++){
+        categoryMap1.put("政治", 8);
+        categoryMap1.put("计算机", 9);
+        categoryMap1.put("经济", 10);
+        categoryMap1.put("农业", 11);
+        categoryMap1.put("艺术", 12);
+//        categoryMap1.put("矿藏", 13);
+//        categoryMap1.put("运输", 14);
+        categoryMap1.put("体育", 6);
+        categoryMap1.put("太空", 15);
+        categoryMap1.put("历史", 16);
+//        categoryMap1.put("军事", 4);
+        categoryMap1.put("环境", 17);
 
+        for(Iterator iterator = categoryMap1.entrySet().iterator(); iterator.hasNext();){
+            Map.Entry entry = (Map.Entry) iterator.next();
+            String word = (String) entry.getKey();
+            Integer cateGoryId = categoryMap1.get(word);
             //加载贝叶斯分类词词频
-            loadCategoryNbcPositiveWords(i);
+            loadCategoryNbcPositiveWords(cateGoryId);
             logger.info("IG分类特征词-step1:统计每个分类词出现文档次数");
-            statisticalCategoryWordDocNums(i);
+            statisticalCategoryWordDocNums(cateGoryId);
         }
         //计算每个分类每个词的正负文本频率和不出现频率
         logger.info("IG分类特征词-step2:计算每个分类每个词的正负文本频率和不出现频率");
@@ -205,7 +212,6 @@ public class IgTrain {
                 igCategoryModel.addWordIg(igWordModel);
 
             }
-
         }
     }
 

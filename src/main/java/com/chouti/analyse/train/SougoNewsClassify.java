@@ -119,7 +119,7 @@ public class SougoNewsClassify {
         if (null != bwMap) {
             BufferedWriter bw = bwMap.get(category);
             if(null == bw){
-                String weibosTagSegLdaPath = "/home/xiaoming/newsLearn/news_fenlei" + File.separator +"category_"+category + ".dat";
+                String weibosTagSegLdaPath = "/home/xiaoming/newsLearn/news_train_souhu" + File.separator +"category_"+category + ".dat";
                 bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(weibosTagSegLdaPath), "UTF-8"));
                 bwMap.put(category, bw);
             }

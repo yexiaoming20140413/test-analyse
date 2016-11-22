@@ -99,11 +99,11 @@ public class IgFudanTrain {
                     }
                     String word = igWordModel.getWord();
                     Integer num = wordsMap.get(word);
+                    if(num == null){
+                        continue;
+                    }
                     bw.write(word);
                     bw.newLine();
-                    if(num == null){
-                        logger.info("num is null");
-                    }
                     bw.write(num+"");
                     bw.newLine();
                 }

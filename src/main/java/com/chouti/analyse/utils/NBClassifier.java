@@ -41,8 +41,8 @@ public class NBClassifier {
 //        nbcPositivePrioriProb = 1.0 * nbcPositiveMap.size() / (nbcPositiveMap.size() + nbcNegativeMap.size());
 //        nbcNegativePrioriProb = 1.0 * nbcNegativeMap.size() / (nbcNegativeMap.size() + nbcPositiveMap.size());
 
-//        nbcPositivePrioriProb = Math.log(1.0 * nbcPositiveMap.size() / (nbcPositiveMap.size() + nbcNegativeMap.size()));
-//        nbcNegativePrioriProb = Math.log(1.0 * nbcNegativeMap.size() / (nbcNegativeMap.size() + nbcPositiveMap.size()));
+        nbcPositivePrioriProb = Math.log(1.0 * nbcPositiveMap.size() / (nbcPositiveMap.size() + nbcNegativeMap.size()));
+        nbcNegativePrioriProb = Math.log(1.0 * nbcNegativeMap.size() / (nbcNegativeMap.size() + nbcPositiveMap.size()));
 
         this.nbcPositeiveWordCount = nbcPositeiveWordCount;
         this.nbcNegativeWordCount = nbcNegativeWordCount;
@@ -78,7 +78,7 @@ public class NBClassifier {
         double[][] conditionalProb = new double[2][wordFreMap.size()];
         conditionalProb[0] = getProbMatrix(nbcPositiveMap, nbcPositeiveWordCount, wordFreMap,true);
         conditionalProb[1] = getProbMatrix(nbcNegativeMap, nbcNegativeWordCount, wordFreMap,false);
-        double[] classProb = {0.0, 0.0};
+        double[] classProb = {nbcPositivePrioriProb, nbcNegativePrioriProb};
         for (int i = 0; i < classProb.length; ++i) {
             for (int j = 0; j < wordFreMap.size(); ++j) {
                 classProb[i] += java.lang.Math.log(conditionalProb[i][j]);
@@ -129,7 +129,7 @@ public class NBClassifier {
                 tmpCount = (double) docMap.get(key);
             }
 
-            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.00000000001) * weight / (classWordCount + 0.00000000002);
+            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.0001) * weight / (classWordCount + 0.0002);
         }
         return probMatrixPerClass;
     }

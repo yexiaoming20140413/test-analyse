@@ -23,7 +23,8 @@ public class TestClass {
     private static List<NbcWordsMap> allCategoryWordList = new ArrayList<>();
     private static ChoutiSegment choutiSegment = new ChoutiSegment();
 
-    private static String wordsFileDir ="/home/xiaoming/newsLearn/news_fenlei/";
+    private static String wordsFileDir ="/home/xiaoming/newsLearn/news_train_souhu/";
+//    private static String wordsFileDir ="/home/xiaoming/newsLearn/news_train_fudan/";
 
     public static void main(String args[]){
         categoryMap1.put(1,"财经");
@@ -33,8 +34,20 @@ public class TestClass {
         categoryMap1.put(5,"汽车");
         categoryMap1.put(6,"体育");
         categoryMap1.put(7,"娱乐");
-        for(int i = 1;i <= categoryMap1.size();i++){
-            loadCategoryNbcPositiveWords(i);
+
+
+        categoryMap1.put(8,"政治");
+        categoryMap1.put(9,"计算机");
+        categoryMap1.put(10,"经济");
+        categoryMap1.put(11,"农业");
+        categoryMap1.put(12,"艺术");
+        categoryMap1.put(15,"太空");
+        categoryMap1.put(16,"历史");
+        categoryMap1.put(17,"环境");
+        for(Iterator iterator = categoryMap1.entrySet().iterator(); iterator.hasNext();){
+            Map.Entry entry = (Map.Entry) iterator.next();
+            Integer cateGoryId = (Integer) entry.getKey();
+            loadCategoryNbcPositiveWords(cateGoryId);
         }
         loadCategoryNbcNegativeWords();
 
@@ -120,7 +133,23 @@ public class TestClass {
      * @return
      */
     public static Integer compareNewsCategory(String content){
-        content="・乱弹阿翔《完美落地》 [07-13　16:31] ・刘德华《笑着哭》 [03-05　18:02] ・杨丞琳《黑色月亮》 [09-19　16:24] ・苏慧伦《黄色月亮》 [09-19　16:22] ・徐若瑄《坐在月亮上》 [09-19　16:20] ・伊能静《带我去月亮》 [09-19　16:19] ・郭采洁《又圆了的月亮》 [09-19　16:15] ・郑秀文《上弦月》 [09-19　16:14] ・徐佳莹《一样的月光》 [09-19　16:13] ・许美静《城里的月光》 [09-19　16:12] ・邓丽君《月亮代表我的心》 [09-19　16:11] ・王菲《但愿人长久》 [09-19　16:10] ・黎明《深秋的黎明》 [09-16　16:06] ・谭咏麟《爱在深秋》 [09-16　16:05] ・毛宁《晚秋》 [09-16　16:02] ・苏醒《秋天》 [09-16　15:59] ・叶欢《谁在秋天捡到我的心》 [09-16　15:57] ・锦绣二重唱《天凉好个秋》 [09-16　15:56] ・张智霖/许秋怡《片片枫叶情》 [09-16　15:54] ・周杰伦《枫》 [09-16　15:44] ・苏慧伦《秋天的海》 [09-16　15:43] ・侯湘婷《秋天别来》 [09-16　15:38] ・春田花花幼稚园 [09-07　11:04] ・老师你好吗 [09-07　11:03] ・感谢有你老师 [09-07　11:01] ・老师的话 [09-07　11:00] ・教师礼赞 [09-07　10:59] ・我爱米兰 [09-07　10:55] ・长大后我就成了你 [09-07　10:47] ・每当我走过老师的窗前 [09-07　10:45]";
+        content="在20日上午结束的深圳ITF100k的单打决赛中，彭帅苦战三盘并在第二盘一度3-5落后逆转罗马尼亚选手提格夺得冠军，收获了宝贵的140个积分，凭借中国赛季中的广州首冠以及这两周在ITF赛场良好的表现，彭帅的世界排名从年初的五百开外一路飙升至前100，下周将来到第84位，超过另一位中国小花郑赛赛位列中国三姐，同时也帮助自己锁定了明年的澳网正赛席位，也很有可能凭此排名入围深圳国际赛的正赛名单。\n" +
+                "\n" +
+                "复出第二冠 彭帅重返top100 位列中国三姐\n" +
+                "\n" +
+                "中国女网黄金年代仅存的一位金花依旧具有竞争力，不到一年的时间就重返前100，这也让我们看到了中国网坛新人们的冲击力并不强硬，小花们在100位的大关迟迟不能突破，而伤愈复出险些就不能继续网球生涯的彭帅还能在30岁的“高龄”凭借努力和斗志顽强坚持，实在值得小花们敬佩和学习。\n" +
+                "\n" +
+                "复出第二冠 彭帅重返top100 位列中国三姐\n" +
+                "\n" +
+                "WTA巡回赛赛季末大多数排名靠前的球员已经亟不可待地开始了自己的假期，而对于那些争取在明年大赛开始之前获得一个更好的排名以及争取更多的奖金的球员来说，她们的假期还没到来，本周的女子赛事除了深圳的ITF100之外，还有法国利摩日的WTA125K系列赛以及台北海硕杯的比赛，彭帅选择了本土的这项比赛是因为这站比赛竞争力更小易于争取更好的轮次还有更加便捷的交通选择。彭帅在这里展现了良好的竞技状态，也从上周日本ITF的半决赛中鏖战三盘输给张帅之后恢复了出来，在第二轮面对状态不俗的同胞刘畅，彭帅送出双蛋血洗对手，这也说明了曾经的中国一姐在慢慢找回手感。\n" +
+                "\n" +
+                "复出第二冠 彭帅重返top100 位列中国三姐\n" +
+                "\n" +
+                "获得本站冠军之后，彭帅的冠军积分更是来到了世界第一的位置，是的，你们没有听错，并不是积分系统出了问题，而是总决赛之后的几场比赛的冠军积分都是计入在17赛季，在17赛季的冠军排名里，所有选手的积分都已清空，而高排位的球员们早已经结束了16赛季开始了欢乐的度假，自然没有冠军积分，所以争夺奖金和积分的只剩下那些还在为17赛季努力做准备的低排位球员，凭借这两周的良好表现，彭帅获得了数量不错的积分，此外，中国一姐张帅的冠军排名也在前三，世界前三里竟有两位中国球员，真可谓是中国网坛的“盛世”啊！可大家千万别被这个表面现象给骗了，等到真正的17赛季拉开大幕，高排位好手们在大比赛中对积分奖金的大包大揽很快就将改变冠军排名的局势，不过我们也可以好好过过中国球员世界排名第一的瘾啦！\n" +
+                "\n" +
+                "复出第二冠 彭帅重返top100 位列中国三姐\n" +
+                "\n" +
+                "彭帅在这站比赛之后也就正式开始休赛季了，可以好好放松放松之后开始冬训为明年的澳洲赛季做准备，期待能重回巅峰。而对于大多数中国球员来说，这周开始的中国大奖赛也成了他们为家乡争夺荣誉以及为自己争取奖金的一个机会，还有另一位中国金花张帅将远赴夏威夷去参加一站WTA125k的比赛，比赛之余还可以好好地在火奴鲁鲁的骄阳，沙滩与大海里度过一个完美的假期！让我们期待17赛季的中国选手们能够大放异彩吧！（来源：网球之家 作者：何洋洋）";
         Integer nearCategoryId = null;
         for(int i = 0;i < allCategoryWordList.size();i++){
             NbcWordsMap nbcWordsMap = allCategoryWordList.get(i);

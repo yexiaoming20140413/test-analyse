@@ -31,15 +31,15 @@ public class TrainFudanNews {
         //将语料库分类
 //        newsCategory();
 
-        for(int i = 1;i <= map1.size();i++){
-            for(Iterator iterator = map1.entrySet().iterator(); iterator.hasNext();){
-                Map.Entry entry = (Map.Entry) iterator.next();
-                String word = (String) entry.getKey();
-                Integer cateGoryId = categoryMap1.get(map1.get(word));
-                segmentCagoryNews(cateGoryId);
-            }
 
+        for (Iterator iterator = map1.entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            String word = (String) entry.getKey();
+            Integer cateGoryId = categoryMap1.get(map1.get(word));
+            segmentCagoryNews(cateGoryId);
         }
+
+
     }
 
     public static void segmentCagoryNews(Integer i) throws Exception{

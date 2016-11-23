@@ -1,6 +1,7 @@
 
 
 
+
 datasource:
   url: *************************************useUnicode=true&amp;characterEncoding=UTF-8
   driverClassName: com.mysql.jdbc.Driver

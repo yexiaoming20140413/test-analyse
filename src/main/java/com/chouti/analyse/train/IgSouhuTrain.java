@@ -26,7 +26,7 @@ public class IgSouhuTrain {
 
     private static List<IgCategoryModel> igCategoryModelList = new ArrayList<>();
 
-    private static Integer CATEGORY_FEATURE_WORD_LEN=500;
+    private static Integer CATEGORY_FEATURE_WORD_LEN=1000;
 
     private static List<NbcWordsMap> allCategoryWordList = new ArrayList<>();
 
@@ -91,11 +91,12 @@ public class IgSouhuTrain {
                     }
                     String word = igWordModel.getWord();
                     Integer num = wordsMap.get(word);
+                    if(num == null){
+                        continue;
+                    }
                     bw.write(word);
                     bw.newLine();
-                    if(num == null){
-                        logger.info("num is null");
-                    }
+
                     bw.write(num+"");
                     bw.newLine();
                 }

@@ -129,7 +129,7 @@ public class NBClassifier {
                 tmpCount = (double) docMap.get(key);
             }
 
-            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.0001) * weight / (classWordCount + 0.0002);
+            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.0000000001) * weight / (classWordCount + 0.0000000002);
         }
         return probMatrixPerClass;
     }

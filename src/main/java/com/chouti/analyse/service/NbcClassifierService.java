@@ -82,6 +82,7 @@ public class NbcClassifierService {
             nbcWordsMap.setPositiveDocsNum(docNums);
             allCategoryWordList.add(nbcWordsMap);
         }catch(Exception err){
+            err.printStackTrace();
             logger.error("加载分类正文本词-词频异常，categoryId="+categoryId);
         }
 
@@ -159,15 +160,4 @@ public class NbcClassifierService {
         return nearCategoryId;
     }
 
-    public static void main(String args[]){
-        Map<String,Integer> map = new HashMap<>();
-        Map<String,Integer> map1 = new HashMap<>();
-        Map<String,Integer> map2 = new HashMap<>();
-        map.put("haha",1);
-        map.put("hehe",2);
-        map1.put("haha",3);
-        map2.putAll(map);
-        map2.putAll(map1);
-        System.out.println("map2:"+map2);
-    }
 }

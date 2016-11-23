@@ -44,6 +44,8 @@ public class CommonParams {
 
     public static String CATEGORY_WORD_FEATURE_IG_PRIFIX="category_words_ig_";
 
+    public static String CATEGORY_WORD_FEATURE_IG_WEIGHT_PRIFIX="category_words_ig_weight_";
+
 
 
 

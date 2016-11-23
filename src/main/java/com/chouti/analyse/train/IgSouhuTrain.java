@@ -66,10 +66,13 @@ public class IgSouhuTrain {
     public static void saveCagegoryIgWords() throws Exception{
 
         for(int i = 0;i < igCategoryModelList.size();i++){
+            double d = 0.0;
             IgCategoryModel igCategoryModel = igCategoryModelList.get(i);
             List<IgWordModel> igWordModelList = igCategoryModel.getIgWordModelList();
             String categoryWordFreFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_PRIFIX+igCategoryModel.getCategoryId()+".dat";
+            String categoryWordWeightFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_WEIGHT_PRIFIX+igCategoryModel.getCategoryId()+".dat";
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordFreFile), "UTF-8"));
+            BufferedWriter bw1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordWeightFile), "UTF-8"));
             Map<String,Integer> wordsMap = null;
             Integer categoryDocNum = 0;
             if(!CollectionUtils.isEmpty(igWordModelList)){
@@ -84,24 +87,40 @@ public class IgSouhuTrain {
                 bw.write(categoryDocNum+"");
                 bw.newLine();
                 int index = 0;
+                int maxWordNum = 0;
+                double maxWeight = 0.0;
                 for(IgWordModel igWordModel:igWordModelList){
                     index ++;
                     if(index > CATEGORY_FEATURE_WORD_LEN){
                         break;
                     }
+
                     String word = igWordModel.getWord();
                     Integer num = wordsMap.get(word);
                     if(num == null){
                         continue;
                     }
+                    if(maxWordNum == 0){
+                        maxWordNum = num;
+                        maxWeight = igWordModel.getInfoGain();
+                    }
+                    Double weightNum = (igWordModel.getInfoGain()/maxWeight)*maxWordNum;
+
+                    bw1.write(word);
+                    bw1.newLine();
+                    bw1.write(weightNum.intValue()+" "+igWordModel.getInfoGain()+"");
+                    bw1.newLine();
+
                     bw.write(word);
                     bw.newLine();
 
-                    bw.write(num+"");
+//                    bw.write(num+"");
+                    bw.write(weightNum.intValue()+"");
                     bw.newLine();
                 }
             }
             bw.close();
+            bw1.close();
         }
     }
 

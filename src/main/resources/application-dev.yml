@@ -1,33 +1,25 @@
-#spring:
-#  rabbitmq:
-#    addresses: 172.16.3.107:5672
-#    username: guest
-#    password: guest
-#    virtual-host: /
-#    listener:
-#      #消息确认模式为手动 需要手动描述消息是否消费
-#      #最大同时消费数量
-#      max-concurrency: 10
+
+
 
 
 datasource:
-  url: jdbc:mysql://172.16.0.31:3306/tiaodan_spider?useUnicode=true&amp;characterEncoding=UTF-8
+  url: *************************************useUnicode=true&amp;characterEncoding=UTF-8
   driverClassName: com.mysql.jdbc.Driver
-  username: root
-  password: gozapdev
+  username: ********
+  password: ********
 
 cagetory:
   words:
     fileDir: /home/xiaoming/newsLearn/news_train_souhu/
 
 redis:
-  host: 172.16.3.102
-  port: 6382
+  host: ************
+  port: ********
 
 app:
   profile: dev
-  name: chouti-analyse
-  FeedbackBaseUrl: http://git.chouti.com/api/v3/projects/11/issues
+  name: test-analyse
+  FeedbackBaseUrl: ********************88
   PrivateToken: -FRkJHxJNsh-GkAYRrga
 
 server:

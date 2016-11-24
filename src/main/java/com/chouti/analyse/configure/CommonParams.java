@@ -37,6 +37,10 @@ public class CommonParams {
      * 训练分类文本数量
      */
     public static int TRAIN_NEWS_SIZE =1000;
+    /**
+     * 每个分类特征词数量
+     */
+    public static int CATEGORY_FEATURE_WORD_LEN = 2000;
 
     /**
      * 计算tfidf 词权单词数量

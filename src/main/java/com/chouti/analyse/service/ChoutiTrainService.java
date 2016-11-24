@@ -176,7 +176,7 @@ public class ChoutiTrainService {
 
     private static List<IgCategoryModel> igCategoryModelList = new ArrayList<>();
 
-    private static Integer CATEGORY_FEATURE_WORD_LEN=1000;
+    private static Integer CATEGORY_FEATURE_WORD_LEN=2000;
 
     public void genCategoryIgWords() throws Exception{
         logger.info("IG分类特征词选取开始");
@@ -216,9 +216,9 @@ public class ChoutiTrainService {
             IgCategoryModel igCategoryModel = igCategoryModelList.get(i);
             List<IgWordModel> igWordModelList = igCategoryModel.getIgWordModelList();
             String categoryWordFreFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_PRIFIX+igCategoryModel.getCategoryId()+".dat";
-            String categoryWordWeightFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_WEIGHT_PRIFIX+igCategoryModel.getCategoryId()+".dat";
+//            String categoryWordWeightFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_WEIGHT_PRIFIX+igCategoryModel.getCategoryId()+".dat";
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordFreFile), "UTF-8"));
-            BufferedWriter bw1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordWeightFile), "UTF-8"));
+//            BufferedWriter bw1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordWeightFile), "UTF-8"));
             Map<String,Integer> wordsMap = null;
             Integer categoryDocNum = 0;
             if(!CollectionUtils.isEmpty(igWordModelList)){
@@ -237,7 +237,7 @@ public class ChoutiTrainService {
                 double maxWeight = 0.0;
                 for(IgWordModel igWordModel:igWordModelList){
                     index ++;
-                    if(index > CATEGORY_FEATURE_WORD_LEN){
+                    if(index > CommonParams.CATEGORY_FEATURE_WORD_LEN){
                         break;
                     }
 
@@ -252,10 +252,10 @@ public class ChoutiTrainService {
                     }
                     Double weightNum = (igWordModel.getInfoGain()/maxWeight)*maxWordNum;
 
-                    bw1.write(word);
-                    bw1.newLine();
-                    bw1.write(weightNum.intValue()+" "+igWordModel.getInfoGain()+"");
-                    bw1.newLine();
+//                    bw1.write(word);
+//                    bw1.newLine();
+//                    bw1.write(weightNum.intValue()+" "+igWordModel.getInfoGain()+"");
+//                    bw1.newLine();
 
                     bw.write(word);
                     bw.newLine();
@@ -266,7 +266,7 @@ public class ChoutiTrainService {
                 }
             }
             bw.close();
-            bw1.close();
+//            bw1.close();
         }
     }
 

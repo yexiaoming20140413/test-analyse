@@ -31,7 +31,12 @@ public class CommonParams {
     /**
      * 定时从数据库中加载未计算hashnews 分页大小
      */
-    public static int LOAD_NO_HASH_NEWS_DB_PAGE_SIZE=100;
+    public static int LOAD_NO_HASH_NEWS_DB_PAGE_SIZE=50;
+
+    /**
+     * 训练分类文本数量
+     */
+    public static int TRAIN_NEWS_SIZE =1000;
 
     /**
      * 计算tfidf 词权单词数量

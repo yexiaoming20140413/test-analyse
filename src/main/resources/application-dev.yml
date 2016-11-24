@@ -3,23 +3,23 @@
 
 
 datasource:
-  url: *************************************useUnicode=true&amp;characterEncoding=UTF-8
+  url: jdbc:mysql://172.16.0.31:3306/tiaodan_spider?useUnicode=true&amp;characterEncoding=UTF-8
   driverClassName: com.mysql.jdbc.Driver
-  username: ********
-  password: ********
+  username: root
+  password: gozapdev
 
 cagetory:
   words:
     fileDir: /home/xiaoming/newsLearn/news_train_souhu/
 
 redis:
-  host: ************
-  port: ********
+  host: 172.16.3.102
+  port: 6382
 
 app:
   profile: dev
-  name: test-analyse
-  FeedbackBaseUrl: ********************88
+  name: chouti-analyse
+  FeedbackBaseUrl: http://git.chouti.com/api/v3/projects/11/issues
   PrivateToken: -FRkJHxJNsh-GkAYRrga
 
 server:

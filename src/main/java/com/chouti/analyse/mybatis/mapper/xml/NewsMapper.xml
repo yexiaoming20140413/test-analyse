@@ -94,9 +94,19 @@
         <if test="id != null">
             and id &lt; #{id}
         </if>
-        limit #{size}
+        order by id desc limit #{size}
     </select>
     <select id="queryCategoryList" resultType="com.chouti.analyse.model.NewsCategory">
         select * from news_category
+    </select>
+    <select id="loadTrainFile" resultType="com.chouti.analyse.model.News">
+        select * from news_train where 1=1
+        <if test="id != null">
+            and id &lt; #{id}
+        </if>
+        <if test="categoryId != null">
+            and categoryId = #{categoryId}
+        </if>
+        order by id desc limit #{size}
     </select>
 </mapper>

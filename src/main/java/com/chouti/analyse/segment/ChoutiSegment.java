@@ -371,20 +371,20 @@ public class ChoutiSegment {
         text = text.replaceAll("@[0-9a-zA-Z_\\-\\u4e00-\\u9fa5]{2,30}", " ");//去@某某
         text = text.replaceAll("((http|ftp|https):\\/\\/){0,1}[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?", "");//去网址
         text = text.replaceAll("]", "");
-        Pattern p = Pattern.compile("#([^#]+)#");
-        Matcher m = p.matcher(text);
-        Set<String> topics = new HashSet<String>();
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            for (int i = 1; i <= m.groupCount(); i++) {
-                String str = m.group(i);
-                topics.add(str);
-                m.appendReplacement(sb, "");
-            }
-        }
-        m.appendTail(sb);
+//        Pattern p = Pattern.compile("#([^#]+)#");
+//        Matcher m = p.matcher(text);
+//        Set<String> topics = new HashSet<String>();
+//        StringBuffer sb = new StringBuffer();
+//        while (m.find()) {
+//            for (int i = 1; i <= m.groupCount(); i++) {
+//                String str = m.group(i);
+//                topics.add(str);
+//                m.appendReplacement(sb, "");
+//            }
+//        }
+//        m.appendTail(sb);
 
-        List<Term> terms = segment.seg(sb.toString());
+        List<Term> terms = segment.seg(text);
         if (CollectionUtils.isEmpty(terms)) {
             return null;
         }
@@ -420,20 +420,20 @@ public class ChoutiSegment {
         text = text.replaceAll("@[0-9a-zA-Z_\\-\\u4e00-\\u9fa5]{2,30}", " ");//去@某某
         text = text.replaceAll("((http|ftp|https):\\/\\/){0,1}[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?", "");//去网址
         text = text.replaceAll("]", "");
-        Pattern p = Pattern.compile("#([^#]+)#");
-        Matcher m = p.matcher(text);
-        Set<String> topics = new HashSet<String>();
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            for (int i = 1; i <= m.groupCount(); i++) {
-                String str = m.group(i);
-                topics.add(str);
-                m.appendReplacement(sb, "");
-            }
-        }
-        m.appendTail(sb);
+//        Pattern p = Pattern.compile("#([^#]+)#");
+//        Matcher m = p.matcher(text);
+//        Set<String> topics = new HashSet<String>();
+//        StringBuffer sb = new StringBuffer();
+//        while (m.find()) {
+//            for (int i = 1; i <= m.groupCount(); i++) {
+//                String str = m.group(i);
+//                topics.add(str);
+//                m.appendReplacement(sb, "");
+//            }
+//        }
+//        m.appendTail(sb);
 
-        List<Term> terms = segment.seg(sb.toString());
+        List<Term> terms = segment.seg(text);
         if (CollectionUtils.isEmpty(terms)) {
             return null;
         }
@@ -485,20 +485,20 @@ public class ChoutiSegment {
         text = text.replaceAll("@[0-9a-zA-Z_\\-\\u4e00-\\u9fa5]{2,30}", " ");//去@某某
         text = text.replaceAll("((http|ftp|https):\\/\\/){0,1}[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?", "");//去网址
         text = text.replaceAll("]", "");
-        Pattern p = Pattern.compile("#([^#]+)#");
-        Matcher m = p.matcher(text);
-        Set<String> topics = new HashSet<String>();
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            for (int i = 1; i <= m.groupCount(); i++) {
-                String str = m.group(i);
-                topics.add(str);
-                m.appendReplacement(sb, "");
-            }
-        }
-        m.appendTail(sb);
+//        Pattern p = Pattern.compile("#([^#]+)#");
+//        Matcher m = p.matcher(text);
+//        Set<String> topics = new HashSet<String>();
+//        StringBuffer sb = new StringBuffer();
+//        while (m.find()) {
+//            for (int i = 1; i <= m.groupCount(); i++) {
+//                String str = m.group(i);
+//                topics.add(str);
+//                m.appendReplacement(sb, "");
+//            }
+//        }
+//        m.appendTail(sb);
 
-        List<Term> terms = segment.seg(sb.toString());
+        List<Term> terms = segment.seg(text);
         CoreStopWordDictionary.apply(terms);
 
         for (Term term : terms) {
@@ -535,20 +535,7 @@ public class ChoutiSegment {
         text = text.replaceAll("@[0-9a-zA-Z_\\-\\u4e00-\\u9fa5]{2,30}", " ");//去@某某
         text = text.replaceAll("((http|ftp|https):\\/\\/){0,1}[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?", "");//去网址
         text = text.replaceAll("]", "");
-        Pattern p = Pattern.compile("#([^#]+)#");
-        Matcher m = p.matcher(text);
-        Set<String> topics = new HashSet<String>();
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            for (int i = 1; i <= m.groupCount(); i++) {
-                String str = m.group(i);
-                topics.add(str);
-                m.appendReplacement(sb, "");
-            }
-        }
-        m.appendTail(sb);
-
-        List<Term> terms = segment.seg(sb.toString());
+        List<Term> terms = segment.seg(text);
         CoreStopWordDictionary.apply(terms);
 
         for (Term term : terms) {
@@ -583,20 +570,20 @@ public class ChoutiSegment {
         text = text.replaceAll("@[0-9a-zA-Z_\\-\\u4e00-\\u9fa5]{2,30}", " ");//去@某某
         text = text.replaceAll("((http|ftp|https):\\/\\/){0,1}[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?", "");//去网址
         text = text.replaceAll("]", "");
-        Pattern p = Pattern.compile("#([^#]+)#");
-        Matcher m = p.matcher(text);
-        Set<String> topics = new HashSet<String>();
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            for (int i = 1; i <= m.groupCount(); i++) {
-                String str = m.group(i);
-                topics.add(str);
-                m.appendReplacement(sb, "");
-            }
-        }
-        m.appendTail(sb);
+//        Pattern p = Pattern.compile("#([^#]+)#");
+//        Matcher m = p.matcher(text);
+//        Set<String> topics = new HashSet<String>();
+//        StringBuffer sb = new StringBuffer();
+//        while (m.find()) {
+//            for (int i = 1; i <= m.groupCount(); i++) {
+//                String str = m.group(i);
+//                topics.add(str);
+//                m.appendReplacement(sb, "");
+//            }
+//        }
+//        m.appendTail(sb);
 
-        List<Term> terms = segment.seg(sb.toString());
+        List<Term> terms = segment.seg(text);
         if (CollectionUtils.isEmpty(terms)) {
             return null;
         }

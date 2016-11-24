@@ -122,7 +122,7 @@ public class NBClassifier {
             double tmpCount = 0.0;
             Double weight = 1.0;
             if (positive) {
-//                System.out.println("word:" + key + "-nbcPositiveMap:" + nbcPositiveMap.get(key) + "-nbcNegativeMap:" + nbcNegativeMap.get(key) + "nbcPositiveMapCount:" + nbcPositeiveWordCount + "-nbcNegativeWordCount:" + nbcNegativeWordCount);
+                System.out.println("word:" + key + "-nbcPositiveMap:" + nbcPositiveMap.get(key) + "-nbcNegativeMap:" + nbcNegativeMap.get(key) + "nbcPositiveMapCount:" + nbcPositeiveWordCount + "-nbcNegativeWordCount:" + nbcNegativeWordCount);
 
             }
             if (docMap.containsKey(key)) {

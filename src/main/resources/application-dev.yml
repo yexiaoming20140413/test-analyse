@@ -10,7 +10,9 @@ datasource:
 
 cagetory:
   words:
-    fileDir: /home/xiaoming/newsLearn/news_train_souhu/
+    fileDir:
+      souhu: /home/xiaoming/newsLearn/news_train_souhu/
+      chouti: /home/xiaoming/newsLearn/news_train_chouti/
 
 redis:
   host: 172.16.3.102

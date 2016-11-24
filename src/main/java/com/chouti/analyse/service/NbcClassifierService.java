@@ -29,7 +29,7 @@ import java.util.*;
 public class NbcClassifierService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Value("${cagetory.words.fileDir}")
+    @Value("${cagetory.words.fileDir.souhu}")
     private String wordsFileDir;
 
     @Autowired

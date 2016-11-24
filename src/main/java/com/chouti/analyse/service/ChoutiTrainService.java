@@ -13,6 +13,7 @@ import com.chouti.analyse.train.WordFrequece;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -30,7 +31,9 @@ import java.util.regex.Pattern;
 public class ChoutiTrainService {
 
     private static Logger logger = LoggerFactory.getLogger(TrainSouhuNews.class);
-    private static final String SOUGO_NEWS_FILE_PATH = "/home/xiaoming/newsLearn/news_train_chouti/";
+
+    @Value("${cagetory.words.fileDir.chouti}")
+    private String SOUGO_NEWS_FILE_PATH;
 
     private static ChoutiSegment choutiSegment = new ChoutiSegment();
 
@@ -113,7 +116,7 @@ public class ChoutiTrainService {
     }
 
 
-    public static void segmentCagoryNews(int i) throws Exception{
+    public void segmentCagoryNews(int i) throws Exception{
         String categoryFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
         String categoryWordFreFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_NBC_PRIFIX+i+".dat";
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryFile), "UTF-8"));
@@ -209,7 +212,7 @@ public class ChoutiTrainService {
     }
 
 
-    public static void saveCagegoryIgWords() throws Exception{
+    public void saveCagegoryIgWords() throws Exception{
 
         for(int i = 0;i < igCategoryModelList.size();i++){
             double d = 0.0;
@@ -276,7 +279,7 @@ public class ChoutiTrainService {
      * 加载所有分类正文本词-词频
      * @param categoryId
      */
-    public static void loadCategoryNbcPositiveWords(Integer categoryId){
+    public void loadCategoryNbcPositiveWords(Integer categoryId){
         try{
             Map<String,Integer> nbcPositiveMap = new HashMap<>();
             String categoryWordFreFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_NBC_PRIFIX+categoryId+".dat";
@@ -391,7 +394,7 @@ public class ChoutiTrainService {
     }
 
     //统计每个分类词出现文档次数
-    public static void statisticalCategoryWordDocNums(int i) throws Exception{
+    public void statisticalCategoryWordDocNums(int i) throws Exception{
         String categoryFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
 
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryFile), "UTF-8"));

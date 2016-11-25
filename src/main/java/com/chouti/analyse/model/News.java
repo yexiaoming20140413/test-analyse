@@ -61,6 +61,11 @@ public class News {
      */
     private String tfIdf;
 
+    /**
+     * 分类id
+     */
+    private Integer categoryId;
+
 
     public Long getId() {
         return id;
@@ -173,5 +178,13 @@ public class News {
 
     public void setTfIdf(String tfIdf) {
         this.tfIdf = tfIdf;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }

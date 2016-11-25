@@ -29,7 +29,7 @@ import java.util.*;
 public class NbcClassifierService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Value("${cagetory.words.fileDir.souhu}")
+    @Value("${cagetory.words.fileDir.chouti}")
     private String wordsFileDir;
 
     @Autowired
@@ -141,7 +141,7 @@ public class NbcClassifierService {
                 return null;
             }
             NBClassifier classifier = new NBClassifier(nbcWordsMap.getNbcPositiveMap(),nbcWordsMap.getPositiveDocsNum(), nbcWordsMap.getNbcNegativeMap(), nbcWordsMap.getNegativeDocsNum());
-            double[] classProb = classifier.classify(newsWordMap);
+            double[] classProb = classifier.classify(newsWordMap,false);
             if(classProb[0] > classProb[1]){
                 logger.info("classProb:"+classProb);
                 nearCategoryId = nbcWordsMap.getCategoryId();

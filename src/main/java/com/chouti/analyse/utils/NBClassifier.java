@@ -31,6 +31,15 @@ public class NBClassifier {
     //负文本特征词总频率
     private Integer nbcPositeiveWordCount;
 
+    /**
+     * 正文本命中词频总数
+     */
+    private Double nbcPositeiveHitWordCount=0.0;
+    /**
+     * 负文本命中词频总数
+     */
+    private Double nbcNegativeHitWordCount=0.0;
+
 
     public NBClassifier(Map<String, Integer> nbcPositiveMap, Integer nbcPositeiveWordCount, Map<String, Integer> nbcNegativeMap, Integer nbcNegativeWordCount) {
 
@@ -74,10 +83,13 @@ public class NBClassifier {
      * @param wordFreMap 　待分类文档对应的单词－频数映射
      * @return
      */
-    public double[] classify(Map<String, Integer> wordFreMap) {
+    public double[] classify(Map<String, Integer> wordFreMap,boolean debug) {
         double[][] conditionalProb = new double[2][wordFreMap.size()];
-        conditionalProb[0] = getProbMatrix(nbcPositiveMap, nbcPositeiveWordCount, wordFreMap,true);
+        conditionalProb[0] = getProbMatrix(nbcPositiveMap, nbcPositeiveWordCount, wordFreMap,debug);
         conditionalProb[1] = getProbMatrix(nbcNegativeMap, nbcNegativeWordCount, wordFreMap,false);
+        if(debug){
+            System.out.println("正文本命中词频总数:"+nbcPositeiveHitWordCount+",符文本命中词总数:"+nbcNegativeHitWordCount);
+        }
         double[] classProb = {nbcPositivePrioriProb, nbcNegativePrioriProb};
         for (int i = 0; i < classProb.length; ++i) {
             for (int j = 0; j < wordFreMap.size(); ++j) {
@@ -121,15 +133,18 @@ public class NBClassifier {
             String key = (String) entry.getKey();
             double tmpCount = 0.0;
             Double weight = 1.0;
-            if (positive) {
-                System.out.println("word:" + key + "-nbcPositiveMap:" + nbcPositiveMap.get(key) + "-nbcNegativeMap:" + nbcNegativeMap.get(key) + "nbcPositiveMapCount:" + nbcPositeiveWordCount + "-nbcNegativeWordCount:" + nbcNegativeWordCount);
 
-            }
             if (docMap.containsKey(key)) {
                 tmpCount = (double) docMap.get(key);
             }
+            if (positive) {
+                nbcPositeiveHitWordCount +=tmpCount;
+                System.out.println("word:" + key + "-nbcPositiveMap:" + nbcPositiveMap.get(key) + "-nbcNegativeMap:" + nbcNegativeMap.get(key) + "nbcPositiveMapCount:" + nbcPositeiveWordCount + "-nbcNegativeWordCount:" + nbcNegativeWordCount);
 
-            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.0000000001) * weight / (classWordCount + 0.0000000002);
+            }else{
+                nbcNegativeHitWordCount+=tmpCount;
+            }
+            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.0001) * weight / (classWordCount + 0.0002);
         }
         return probMatrixPerClass;
     }

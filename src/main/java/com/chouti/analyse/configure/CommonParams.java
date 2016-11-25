@@ -36,7 +36,7 @@ public class CommonParams {
     /**
      * 训练分类文本数量
      */
-    public static int TRAIN_NEWS_SIZE =1000;
+    public static int TRAIN_NEWS_SIZE =2000;
     /**
      * 每个分类特征词数量
      */

@@ -27,6 +27,14 @@
         insert into news_tfidf (newsId,tfidf,createTime,updateTime)
         values (#{newsId},#{tfidf},#{createTime},#{updateTime})
     </insert>
+    <insert id="insertTrainNews">
+        <selectKey resultType="java.lang.Long" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into news_train (content,categoryId,createTime)
+        values (#{content},#{categoryId},#{createTime})
+    </insert>
 
 
     <update id="updateNewsSimHash">

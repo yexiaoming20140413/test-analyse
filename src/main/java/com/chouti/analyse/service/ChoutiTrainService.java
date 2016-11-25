@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.*;
@@ -33,7 +34,10 @@ public class ChoutiTrainService {
     private static Logger logger = LoggerFactory.getLogger(TrainSouhuNews.class);
 
     @Value("${cagetory.words.fileDir.chouti}")
-    private String SOUGO_NEWS_FILE_PATH;
+    private String CHOUTI_NEWS_FILE_PATH;
+
+    @Value("${cagetory.words.fileDir.souhu}")
+    private String SOUHU_NEWS_FILE_PATH;
 
     private static ChoutiSegment choutiSegment = new ChoutiSegment();
 
@@ -74,7 +78,7 @@ public class ChoutiTrainService {
         if(categoryId == null || categoryId <= 0){
             return;
         }
-        String weibosTagSegLdaPath = SOUGO_NEWS_FILE_PATH + File.separator +"category_"+categoryId + ".dat";
+        String weibosTagSegLdaPath = CHOUTI_NEWS_FILE_PATH + File.separator +"category_"+categoryId + ".dat";
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(weibosTagSegLdaPath), "UTF-8"));
         boolean loop = true;
         long id = Long.MAX_VALUE;
@@ -117,8 +121,8 @@ public class ChoutiTrainService {
 
 
     public void segmentCagoryNews(int i) throws Exception{
-        String categoryFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
-        String categoryWordFreFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_NBC_PRIFIX+i+".dat";
+        String categoryFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
+        String categoryWordFreFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_NBC_PRIFIX+i+".dat";
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryFile), "UTF-8"));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordFreFile), "UTF-8"));
         String line;
@@ -129,7 +133,7 @@ public class ChoutiTrainService {
 
         while ((line = br.readLine()) != null) {
             lineNum++;
-            Map<String,Integer> wordDocsMap = choutiSegment.segmentFrequency(line, ChoutiSegment.SEGMENT_TYPE_NBC);
+            Map<String,Integer> wordDocsMap = choutiSegment.segmentFrequency(line);
             if(null == wordDocsMap || wordDocsMap.size() <= 0){
                 continue;
             }
@@ -218,7 +222,7 @@ public class ChoutiTrainService {
             double d = 0.0;
             IgCategoryModel igCategoryModel = igCategoryModelList.get(i);
             List<IgWordModel> igWordModelList = igCategoryModel.getIgWordModelList();
-            String categoryWordFreFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_PRIFIX+igCategoryModel.getCategoryId()+".dat";
+            String categoryWordFreFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_PRIFIX+igCategoryModel.getCategoryId()+".dat";
 //            String categoryWordWeightFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_WEIGHT_PRIFIX+igCategoryModel.getCategoryId()+".dat";
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordFreFile), "UTF-8"));
 //            BufferedWriter bw1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordWeightFile), "UTF-8"));
@@ -282,7 +286,7 @@ public class ChoutiTrainService {
     public void loadCategoryNbcPositiveWords(Integer categoryId){
         try{
             Map<String,Integer> nbcPositiveMap = new HashMap<>();
-            String categoryWordFreFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_NBC_PRIFIX+categoryId+".dat";
+            String categoryWordFreFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_NBC_PRIFIX+categoryId+".dat";
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryWordFreFile), "UTF-8"));
             String line;
             String word="";
@@ -395,7 +399,7 @@ public class ChoutiTrainService {
 
     //统计每个分类词出现文档次数
     public void statisticalCategoryWordDocNums(int i) throws Exception{
-        String categoryFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
+        String categoryFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
 
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryFile), "UTF-8"));
         String line;
@@ -424,5 +428,33 @@ public class ChoutiTrainService {
         igCategoryModelList.add(igCategoryModel);
         br.close();
 
+    }
+
+
+    public void loadSouhuNewsToDb() throws Exception{
+//        List<NewsCategory> newsCategoryList = newsMapper.queryCategoryList();
+//        if(!CollectionUtils.isEmpty(newsCategoryList)){
+//            for(int i = 0;i < newsCategoryList.size();i++){
+//                NewsCategory category = newsCategoryList.get(i);
+//                loadSouhuCategoryNewsToDb(category.getId());
+//
+//            }
+//
+//        }
+
+    }
+
+    public void loadSouhuCategoryNewsToDb(Integer categoryId) throws Exception{
+        String categoryFile = SOUHU_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+categoryId+".dat";
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryFile), "UTF-8"));
+        String line;
+        while((line = br.readLine()) != null){
+            News news = new News();
+            news.setContent(line);
+            news.setCategoryId(categoryId);
+            news.setCreateTime(System.currentTimeMillis());
+            newsMapper.insertTrainNews(news);
+        }
+        br.close();
     }
 }

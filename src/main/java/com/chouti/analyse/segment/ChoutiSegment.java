@@ -54,12 +54,12 @@ public class ChoutiSegment {
         holdPosSet.add("ns");     //地名
         holdPosSet.add("nt");     //机构团体名
         holdPosSet.add("nz");     //其他专名
-        holdPosSet.add("vd");     //副动词
-        holdPosSet.add("vn");     //动名词
+//        holdPosSet.add("vd");     //副动词
+//        holdPosSet.add("vn");     //动名词
         holdPosSet.add("an");     //名形词
         holdPosSet.add("nis");    //机构后缀
         holdPosSet.add("nrf");    //nrf 音译人名
-        holdPosSet.add("v");      //动词
+//        holdPosSet.add("v");      //动词
         holdPosSet.add("g");      //学术词汇
         holdPosSet.add("nnt");      //职务职称
         holdPosSet.add("gb");    //生物相关词汇

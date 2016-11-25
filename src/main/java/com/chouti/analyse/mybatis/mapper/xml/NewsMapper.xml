@@ -52,6 +52,9 @@
     <update id="updateTrainNewsCategory">
         update news_train set calCategoryId=#{categoryId} where id=#{id}
     </update>
+    <delete id="delNews">
+        delete from news where id=#{id}
+    </delete>
     <select id="queryNewsCountByTime" resultType="java.lang.Long">
         select count(id) from news where echo = 0 and simhash != NULL
         <if test="startTime != null">

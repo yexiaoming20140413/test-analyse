@@ -52,4 +52,6 @@ public interface NewsMapper {
 
     List<News> loadTrainNews(@Param("newsId") Long newsId, @Param("size") Integer size);
 
+    Integer delNews(Long id);
+
 }

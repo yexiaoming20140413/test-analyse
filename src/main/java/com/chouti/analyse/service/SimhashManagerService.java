@@ -174,6 +174,11 @@ public class SimhashManagerService {
             }
             for (News news : newsList) {
                 newsId = news.getId();
+                Long publishTime = news.getPublishTime();
+                if(null == publishTime || publishTime <= 0 || publishTime >= System.currentTimeMillis()){
+                    newsMapper.delNews(newsId);
+                    continue;
+                }
                 genNewsSimhash(news);
                 if (!StringUtils.isEmpty(news.getSimhash())) {
                     compareNewsHash(news);

@@ -32,13 +32,13 @@ public class ChoutiTrainTests extends ChoutiAnalyseApplicationTests{
         choutiTrainService.genCategoryIgWords();
     }
 
-    @Test
-    public void loadSouhuNewsToDB() throws Exception{
-        choutiTrainService.loadSouhuNewsToDb();
-    }
-
-    @Test
-    public void calNewsCategory() throws Exception{
-        choutiTrainService.calNewsCategory();
-    }
+//    @Test
+//    public void loadSouhuNewsToDB() throws Exception{
+//        choutiTrainService.loadSouhuNewsToDb();
+//    }
+//
+//    @Test
+//    public void calNewsCategory() throws Exception{
+//        choutiTrainService.calNewsCategory();
+//    }
 }

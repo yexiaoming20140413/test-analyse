@@ -40,7 +40,7 @@ public class CommonParams {
     /**
      * 每个分类特征词数量
      */
-    public static int CATEGORY_FEATURE_WORD_LEN = 2000;
+    public static int CATEGORY_FEATURE_WORD_LEN = 500;
 
     /**
      * 计算tfidf 词权单词数量

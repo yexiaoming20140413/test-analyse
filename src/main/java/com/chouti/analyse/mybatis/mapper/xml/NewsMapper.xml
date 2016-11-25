@@ -75,7 +75,7 @@
         limit #{start},#{size}
     </select>
     <select id="queryNoHashNewsList" resultType="com.chouti.analyse.model.News">
-        select id,url,title,content,createTime from news where 1=1 and nohash=0
+        select id,url,title,content,createTime,publishTime from news where 1=1 and nohash=0
         <if test="startTime != null">
             and createTime &gt;= #{startTime}
         </if>

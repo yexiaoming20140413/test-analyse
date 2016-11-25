@@ -187,7 +187,6 @@ public class ChoutiTrainService {
 
     private static List<IgCategoryModel> igCategoryModelList = new ArrayList<>();
 
-    private static Integer CATEGORY_FEATURE_WORD_LEN=2000;
 
     public void genCategoryIgWords() throws Exception{
         logger.info("IG分类特征词选取开始");

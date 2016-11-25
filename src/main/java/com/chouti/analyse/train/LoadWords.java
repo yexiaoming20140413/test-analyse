@@ -25,14 +25,8 @@ public class LoadWords {
         loadKeyWordList.add("政治");
         loadKeyWordList.add("职业");
         loadKeyWordList.add("制造");
-        loadKeyWordList.add("中国");
         loadKeyWordList.add("中医");
         loadKeyWordList.add("中药");
-        loadKeyWordList.add("中文");
-        loadKeyWordList.add("专业");
-        loadKeyWordList.add("专用");
-        loadKeyWordList.add("最新");
-        loadKeyWordList.add("最全");
         loadKeyWordList.add("作家");
     }
     public static void main(String args[]) throws Exception {

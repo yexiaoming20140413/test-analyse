@@ -160,4 +160,41 @@ public class NbcClassifierService {
         return nearCategoryId;
     }
 
+
+    /**
+     * 比较新闻跟哪个分类最接近
+     * @param news
+     * @return
+     */
+    public Integer compareTrainNewsCategory(News news){
+        if(null == news || StringUtils.isEmpty(news.getContent())){
+            return null;
+        }
+        Integer nearCategoryId = null;
+        for(int i = 0;i < allCategoryWordList.size();i++){
+            NbcWordsMap nbcWordsMap = allCategoryWordList.get(i);
+            Map<String,Integer> newsWordMap = choutiSegment.segmentFrequency(news.getContent());
+            if(null == newsWordMap || newsWordMap.size() <= 0){
+                return null;
+            }
+            NBClassifier classifier = new NBClassifier(nbcWordsMap.getNbcPositiveMap(),nbcWordsMap.getPositiveDocsNum(), nbcWordsMap.getNbcNegativeMap(), nbcWordsMap.getNegativeDocsNum());
+            double[] classProb = classifier.classify(newsWordMap,false);
+            if(classProb[0] > classProb[1]){
+                logger.info("classProb:"+classProb);
+                nearCategoryId = nbcWordsMap.getCategoryId();
+                if(null != nearCategoryId && nearCategoryId > 0){
+                    Integer result = newsMapper.updateTrainNewsCategory(news.getId(),nearCategoryId);
+                    if(null == result || result <= 0){
+                        logger.error("更新新闻分类失败:"+result);
+                    }
+                    break;
+                }
+            }
+            classifier = null;
+        }
+
+        logger.info("NewsId="+news.getId()+"最接近的分类Id是:"+nearCategoryId);
+        return nearCategoryId;
+    }
+
 }

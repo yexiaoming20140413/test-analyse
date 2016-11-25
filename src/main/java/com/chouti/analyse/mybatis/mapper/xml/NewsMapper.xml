@@ -49,6 +49,9 @@
     <update id="updateNewsCategory">
         update news set categoryId=#{categoryId} where id=#{id}
     </update>
+    <update id="updateTrainNewsCategory">
+        update news_train set calCategoryId=#{categoryId} where id=#{id}
+    </update>
     <select id="queryNewsCountByTime" resultType="java.lang.Long">
         select count(id) from news where echo = 0 and simhash != NULL
         <if test="startTime != null">
@@ -116,5 +119,12 @@
             and categoryId = #{categoryId}
         </if>
         order by id desc limit #{size}
+    </select>
+    <select id="loadTrainNews" resultType="com.chouti.analyse.model.News">
+        select * from news_train where 1=1
+        <if test="newsId != null">
+            and id &gt; #{newsId}
+        </if>
+        limit #{size}
     </select>
 </mapper>

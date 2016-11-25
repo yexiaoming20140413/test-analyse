@@ -10,6 +10,7 @@ import com.chouti.analyse.train.IgCategoryModel;
 import com.chouti.analyse.train.IgWordModel;
 import com.chouti.analyse.train.TrainSouhuNews;
 import com.chouti.analyse.train.WordFrequece;
+import com.chouti.analyse.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class ChoutiTrainService {
 
     @Autowired
     private NewsMapper newsMapper;
+
+    @Autowired
+    private NbcClassifierService nbcClassifierService;
 
 
 
@@ -456,5 +460,25 @@ public class ChoutiTrainService {
             newsMapper.insertTrainNews(news);
         }
         br.close();
+    }
+
+    /**
+     * 预测新闻分类
+     */
+    public void calNewsCategory() throws Exception{
+        boolean loop = true;
+        long startTime = TimeUtils.getLeftTodayStartTime(CommonParams.LOAD_SIM_HASH_SET_DATE);
+        long newsId = 0l;
+        Integer pageSize = CommonParams.LOAD_NO_HASH_NEWS_DB_PAGE_SIZE;
+        while (loop) {
+            List<News> newsList = newsMapper.loadTrainNews(newsId, pageSize);
+            if (CollectionUtils.isEmpty(newsList) || newsList.size() < pageSize) {
+                loop = false;
+            }
+            for (News news : newsList) {
+                newsId = news.getId();
+                nbcClassifierService.compareTrainNewsCategory(news);
+            }
+        }
     }
 }

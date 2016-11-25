@@ -44,8 +44,12 @@ public interface NewsMapper {
 
     Integer updateNewsCategory(@Param("id") Long id, @Param("categoryId") Integer categoryId);
 
+    Integer updateTrainNewsCategory(@Param("id") Long id, @Param("categoryId") Integer categoryId);
+
     List<News> loadTrainFile(@Param("id") Long id, @Param("categoryId") Integer categoryId,@Param("size") Integer size);
 
     Integer insertTrainNews(News news);
+
+    List<News> loadTrainNews(@Param("newsId") Long newsId, @Param("size") Integer size);
 
 }

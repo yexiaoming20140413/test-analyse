@@ -52,11 +52,13 @@
     <update id="updateTrainNewsCategory">
         update news_train set calCategoryId=#{categoryId} where id=#{id}
     </update>
-    <delete id="delNews">
-        delete from news where id=#{id}
-    </delete>
+
+    <update id="delNews">
+        update news set action=2 where id=#{id}
+    </update>
+
     <select id="queryNewsCountByTime" resultType="java.lang.Long">
-        select count(id) from news where echo = 0 and simhash != NULL
+        select count(id) from news where echo = 0 and simhash != NULL and action !=2
         <if test="startTime != null">
             and createTime &gt;= #{startTime}
         </if>
@@ -65,7 +67,7 @@
         </if>
     </select>
     <select id="queryNewsByTimeAndPage" resultType="com.chouti.analyse.model.News">
-        select id,title,content,simhash from news where echo = 0 and simhash != NULL
+        select id,title,content,simhash from news where echo = 0 and simhash != NULL and action !=2
         <if test="startTime != null">
             and createTime &gt;= #{startTime}
         </if>
@@ -75,7 +77,7 @@
         limit #{start},#{size}
     </select>
     <select id="queryNoHashNewsList" resultType="com.chouti.analyse.model.News">
-        select id,url,title,content,createTime,publishTime from news where 1=1 and nohash=0
+        select id,url,title,content,createTime,publishTime from news where 1=1 and nohash=0 and action != 2
         <if test="startTime != null">
             and createTime &gt;= #{startTime}
         </if>
@@ -85,7 +87,7 @@
         and simhash is null limit #{size}
     </select>
     <select id="queryNewsListByTimeAndId" resultType="com.chouti.analyse.model.News">
-        select id,simhash,createTime,content from news where 1=1
+        select id,simhash,createTime,content from news where 1=1 and action != 2
         <if test="endTime != null">
             and createTime &lt;= #{endTime}
         </if>

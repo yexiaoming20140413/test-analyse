@@ -6,12 +6,11 @@ import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
 import com.hankcs.hanlp.seg.NShort.NShortSegment;
 import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.common.Term;
+import com.hankcs.hanlp.summary.TextRankKeyword;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /*******************************************************************************
  * Copyright (c) 2005-2016 Gozap, Inc.
@@ -32,6 +31,8 @@ public class ChoutiSegment {
 
 
 //    private Map<String, Integer> frequencyMap = new HashMap<>();
+
+    private TextRankKeyword textRankKeyword = new TextRankKeyword();
 
     private static int MIN_SEG_WORD_LEN = 3;
 
@@ -623,6 +624,32 @@ public class ChoutiSegment {
         termsBean.setTotalFrequence(totalFrequence);
         return termsBean;
     }
+
+    /**
+     * 分词统计词频
+     *
+     * @return
+     */
+    public Map<String, Integer> segmentTextRank(String text,Integer size) {
+        if(StringUtils.isEmpty(text)){
+            return null;
+        }
+        text = text.replaceAll("@\\S+ ", "");
+        text = text.replaceAll("@[0-9a-zA-Z_\\-\\u4e00-\\u9fa5]{2,30}", " ");//去@某某
+        text = text.replaceAll("((http|ftp|https):\\/\\/){0,1}[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?", "");//去网址
+        text = text.replaceAll("]", "");
+        Map<String,Integer> resultMap = new HashMap<>();
+        Map<String,Float> termsMap = textRankKeyword.getTermAndRank(text,size);
+        for(Iterator iterator = termsMap.entrySet().iterator(); iterator.hasNext();){
+            Map.Entry entry = (Map.Entry) iterator.next();
+            String key = (String) entry.getKey();
+            Float nums = termsMap.get(key);
+            resultMap.put(key,nums.intValue());
+
+        }
+        return resultMap;
+    }
+
 
 
 }

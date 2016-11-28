@@ -247,9 +247,9 @@ public class ChoutiTrainService {
                 double maxWeight = 0.0;
                 for(IgWordModel igWordModel:igWordModelList){
                     index ++;
-                    if(index > CommonParams.CATEGORY_FEATURE_WORD_LEN){
-                        break;
-                    }
+//                    if(index > CommonParams.CATEGORY_FEATURE_WORD_LEN){
+//                        break;
+//                    }
 
                     String word = igWordModel.getWord();
                     Integer num = wordsMap.get(word);
@@ -271,7 +271,11 @@ public class ChoutiTrainService {
                     bw.newLine();
 
 //                    bw.write(num+"");
-                    bw.write(weightNum.intValue()+"");
+                    Integer intNum = weightNum.intValue();
+                    if(intNum == 0){
+                        intNum = 1;
+                    }
+                    bw.write(intNum+"");
                     bw.newLine();
                 }
             }

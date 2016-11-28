@@ -144,7 +144,7 @@ public class NBClassifier {
             }else{
                 nbcNegativeHitWordCount+=tmpCount;
             }
-            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.00000625) * weight / (classWordCount + 0.000125);
+            probMatrixPerClass[index++] = 1.0 * (tmpCount + 0.0000001) * weight / (classWordCount + 0.0000002);
         }
         return probMatrixPerClass;
     }

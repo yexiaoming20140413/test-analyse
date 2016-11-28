@@ -2,6 +2,7 @@ package com.chouti.analyse.simhash;
 
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.chouti.analyse.segment.ChoutiSegment;
 import com.chouti.analyse.segment.ChoutiTerm;
 
@@ -10,6 +11,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by datamining on 2016/7/12.
@@ -24,7 +26,7 @@ public class SimHash {
 
     private int hashbits = 64;
 
-    private ChoutiSegment segment = new ChoutiSegment();
+    private static ChoutiSegment segment = new ChoutiSegment();
 
     public SimHash(String tokens) throws IOException {
         this.tokens = tokens;
@@ -198,35 +200,17 @@ public class SimHash {
 
     public static void main(String[] args) throws IOException {
 
-        String text1="遇见你之前/MeBeforeYou";
-        String text2="两名美国人在阿富汗遇袭身亡";
+        String text1="看完这两个故事，你会珍惜对方一辈子 珍惜对方故事 浙大黄燕华 · 2016-11-28 10:36 浙江大学热门课程推荐： 浙江大学领导力提升与公司治理创新高级研修班 工业和信息化部中小企业领军人才千人培训计划（浙江大学第五期） 浙江大学金融创新与投资高级研修班 浙江大学国学智慧与商道文化高端研修班 浙江大学求是女子学堂 联系人：黄燕华 老师 微 信：yanhua5555555 电 话：13758218022 传 真：0571-8827 3952 浙大黄燕华(yanhua8022)";
+        String text2="朋友就是雨中的伞 朋友 浙大姜曼 · 2016-11-28 10:36 浙江大学热门课程推荐： 浙江大学领导力提升与公司治理创新高级研修班 工业和信息化部中小企业领军人才千人培训计划（浙江大学第五期） 浙江大学金融创新与投资高级研修班 浙江大学国学智慧与商道文化高端研修班 浙江大学求是女子学堂 联系人：姜 曼 老师 微  信：mamiaon6081 电  话：15088677345 传  真：0571-8827 3952 浙大姜曼(jiangman6081)";
 
-
-        String text3="南棒海豹…跟他爹有一拼…#军事视频# #军事新闻# #国际军事# #环球军事# #武器的秘密# #浩汉防务# #制造业强国# #航空知识# #航空科普# #军情解码# http://t.cn/RtAJo5i .";
-        String text4="【女子无证驾车被查 #扬言嫁给交警#赖一辈子[衰]】27日，交警在宁宣高速和凤收费拦截了一辆超速越野车，经查，驾车女子是无证驾驶。当女子听说要扣车并且还会有进一步处罚时，情绪非常激动，威胁交警已经给他拍照并记住警号了，如果非要处罚，她就嫁给交警，赖上一辈子。http://t.cn/Rtc4012扬子晚报";
-        String text5="鲸播报：长沙非法拆除房屋致人死亡事故7名干部被批捕】2日讯，从长沙市人民检察院获悉，长沙市岳麓区观沙岭街道茶子山村非法拆除房屋致人死亡事故的侦查与处理已有新进展。包括观沙岭街道原党工委书记、办事处主任等7名干部已于近日分别被长沙市人民检察院依法批捕。(新华社)";
-        String text6="在Mnet新舞蹈竞演节目#Hit The Stage#中，当“鬼怪”的突然出现时各位爱豆的反应。#SISTAR宝拉#、#少女时代孝渊#、#SHINee泰民#、#Infinite Hoya#、#Block B有权#、#Monsta X Shownu#、#NCT Ten#、#Twice##Momo#/#Sana#/#俞定延#/#金多贤#/#朴志效#    http://t.cn/RtcUnZ9 .";
-        String text7="【女子无证驾车被查 #扬言嫁给交警#赖一辈子[衰]】27日，交警在宁宣高速和凤收费拦截了一辆超速越野车，经查，驾车女子是无证驾驶。当女子听说要扣车并且还会有进一步处罚时，情绪非常激动，威胁交警已经给他拍照并记住警号了，如果非要处罚，她就嫁给交警，赖上一辈子。http://t.cn/Rtc4012";
-        String text8="【女子无证驾车被查 #扬言嫁给交警#】27日，交警在宁宣高速和凤收费拦截了一辆超速越野车，经查，驾车女子是无证驾驶。当女子听说要扣车并且还会有进一步处罚时，情绪非常激动，威胁交警已经给他拍照并记住警号了，如果非要处罚，她就嫁给交警，赖上一辈子。#控制不了自己情绪的女子娶不得[嘻嘻]#...全文： http://m.weibo.cn/1892327960/4002508907303169";
-        String text9="【长沙检方：涉非法强拆致居民被埋死亡案的7名干部被批捕】从长沙市人民检察院获悉，岳麓区观沙岭街道茶子山村非法拆除房屋致人死亡事故的侦查与处理已有新进展。包括观沙岭街道原党工委书记、办事处主任等7名干部已于近日分别被长沙市人民检察院依法批捕。新华网http://t.cn/RtJiHC5";
-
-
+        Map<String, Integer> list1 = segment.segmentFrequency(text1);
+        Map<String, Integer> list2 = segment.segmentFrequency(text2);
+        System.out.println("list1:"+ JSONObject.toJSONString(list1));
+        System.out.println("list2:"+ JSONObject.toJSONString(list2));
         SimHash simHash1=new SimHash(text1,64);
         SimHash simHash2=new SimHash(text2,64);
-        SimHash simHash3=new SimHash(text2,64);
-        SimHash simHash4=new SimHash(text2,64);
-        SimHash simHash5=new SimHash(text2,64);
-        SimHash simHash6=new SimHash(text2,64);
-        SimHash simHash7=new SimHash(text2,64);
-        SimHash simHash8=new SimHash(text2,64);
-        SimHash simHash9=new SimHash(text2,64);
-
-
         int dist=simHash1.getDistance(simHash1.strSimHash,simHash2.strSimHash);
-        int dist1=simHash1.getDistance(simHash4.strSimHash,simHash5.strSimHash);
-        int dist2=simHash1.getDistance(simHash7.strSimHash,simHash8.strSimHash);
         System.out.println(dist);
-        System.out.println(dist1);
-        System.out.println(dist2);
+
     }
 }

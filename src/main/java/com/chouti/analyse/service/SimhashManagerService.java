@@ -275,7 +275,7 @@ public class SimhashManagerService {
             }else{
                 votes+=1;
             }
-            Double score = CommonUtils.calculateScoreForNews(news.getCreateTime(),votes.longValue());
+            Double score = CommonUtils.calculateScoreForNews(news.getPublishTime(),votes.longValue());
             newsScore.setUpdateTime(now);
             newsScore.setScore(score);
             newsScore.setVote(votes);

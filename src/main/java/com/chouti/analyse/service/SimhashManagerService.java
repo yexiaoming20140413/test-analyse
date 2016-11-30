@@ -176,7 +176,8 @@ public class SimhashManagerService {
             for (News news : newsList) {
                 newsId = news.getId();
                 Long publishTime = news.getPublishTime();
-                if(null == publishTime || publishTime <= 0 || publishTime >= System.currentTimeMillis()){
+                Long now = System.currentTimeMillis();
+                if(null == publishTime || publishTime < (now - CommonParams.LOAD_SIM_HASH_SET_DATE*24*60*60*1000) || publishTime > now){
                     newsMapper.delNews(newsId);
                     continue;
                 }

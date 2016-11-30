@@ -342,6 +342,9 @@ public class SimhashManagerService {
             repeatCount.setRepeatNewids(news.getId()+"");
             newsMapper.insertNewsRepeatCount(repeatCount);
         }else{
+            if(repeatCount.getCount() != null && repeatCount.getCount() > 100){
+                return sameSource;
+            }
             String repeatNewids = repeatCount.getRepeatNewids();
             repeatNewids +=","+news.getId()+"";
             repeatCount.setCount(repeatCount.getCount()+1);

@@ -54,4 +54,18 @@ public interface NewsMapper {
 
     Integer delNews(Long id);
 
+    NewsScore queryNewsScoreById(Long newsId);
+
+    Integer insertNewsScore(NewsScore newsScore);
+
+    Integer updateNewsScore(NewsScore newsScore);
+
+    NewsRepeatCount queryNewsRepeatCount(Long newsId);
+
+    Integer insertNewsRepeatCount(NewsRepeatCount repeatCount);
+
+    Integer updateNewsRepeatCount(NewsRepeatCount repeatCount);
+
+
+
 }

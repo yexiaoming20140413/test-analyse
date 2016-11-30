@@ -12,7 +12,7 @@
     <springProperty scope="context" name="springAppName" source="app.name"/>
     <springProperty scope="context" name="profile" source="app.profile"/>
 
-    <property name="logPrefix" value="chouti-mq"/>
+    <property name="logPrefix" value="chouti-analyse"/>
     <property name="log_dir" value="logs/"/>
     <!-- 日志最大的历史 6 个月  -->
     <property name="maxHistory" value="6"/>

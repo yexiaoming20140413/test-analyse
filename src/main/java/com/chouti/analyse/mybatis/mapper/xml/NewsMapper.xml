@@ -35,6 +35,22 @@
         insert into news_train (content,categoryId,createTime)
         values (#{content},#{categoryId},#{createTime})
     </insert>
+    <insert id="insertNewsScore">
+        <selectKey resultType="java.lang.Long" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into news_score (score,createTime,updateTime,vote,newsId)
+        values (#{score},#{createTime},#{updateTime},#{vote},#{newsId})
+    </insert>
+    <insert id="insertNewsRepeatCount">
+        <selectKey resultType="java.lang.Long" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into news_repeat_count (count,createTime,updateTime,newsId,repeatNewids)
+        values (#{count},#{createTime},#{updateTime},#{newsId},#{repeatNewids})
+    </insert>
 
 
     <update id="updateNewsSimHash">
@@ -55,6 +71,12 @@
 
     <update id="delNews">
         update news set action=2 where id=#{id}
+    </update>
+    <update id="updateNewsScore">
+        update news_score set vote=#{vote},score=#{score},updateTime=#{updateTime} where id=#{id}
+    </update>
+    <update id="updateNewsRepeatCount">
+        update news_repeat_count set count=#{count},updateTime=#{updateTime},repeatNewids=#{repeatNewids} where id=#{id}
     </update>
 
     <select id="queryNewsCountByTime" resultType="java.lang.Long">
@@ -131,5 +153,11 @@
             and id &gt; #{newsId}
         </if>
         limit #{size}
+    </select>
+    <select id="queryNewsScoreById" resultType="com.chouti.analyse.model.NewsScore">
+        select * from news_score where newsId=#{newsId} order by id desc limit 1
+    </select>
+    <select id="queryNewsRepeatCount" resultType="com.chouti.analyse.model.NewsRepeatCount">
+        select * from news_repeat_count where newsId=#{newsId} order by id desc limit 1
     </select>
 </mapper>

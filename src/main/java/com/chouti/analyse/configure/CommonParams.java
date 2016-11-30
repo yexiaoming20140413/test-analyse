@@ -55,6 +55,15 @@ public class CommonParams {
 
     public static String CATEGORY_WORD_FEATURE_IG_WEIGHT_PRIFIX="category_words_ig_weight_";
 
+    /**
+     * 相同源的重复新闻
+     */
+    public static Integer REPEAT_NEWS_SAMESOURCE=1;
+    /**
+     * 不同源的重复新闻
+     */
+    public static Integer REPEAT_NEWS=2;
+
 
 
 

@@ -11,26 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
  *******************************************************************************/
 public class ChoutiTrainTests extends ChoutiAnalyseApplicationTests{
 
-    @Autowired
-    private ChoutiTrainService choutiTrainService;
-
-    @Test
-    public void loadCategoryNewsToFile() throws Exception{
-
-        choutiTrainService.loadCategoryNews();
-    }
-
-    @Test
-    public void segmentCategoryNews() throws Exception{
-
-        choutiTrainService.staticisCategoryWords();
-    }
-
-    @Test
-    public void genCategoryIgWords() throws Exception{
-
-        choutiTrainService.genCategoryIgWords();
-    }
+//    @Autowired
+//    private ChoutiTrainService choutiTrainService;
+//
+//    @Test
+//    public void loadCategoryNewsToFile() throws Exception{
+//
+//        choutiTrainService.loadCategoryNews();
+//    }
+//
+//    @Test
+//    public void segmentCategoryNews() throws Exception{
+//
+//        choutiTrainService.staticisCategoryWords();
+//    }
+//
+//    @Test
+//    public void genCategoryIgWords() throws Exception{
+//
+//        choutiTrainService.genCategoryIgWords();
+//    }
 
 //    @Test
 //    public void loadSouhuNewsToDB() throws Exception{

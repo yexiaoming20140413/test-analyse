@@ -4,6 +4,7 @@ import com.chouti.analyse.configure.CommonParams;
 import com.chouti.analyse.model.*;
 import com.chouti.analyse.mybatis.mapper.NewsMapper;
 import com.chouti.analyse.segment.ChoutiTermsBean;
+import com.chouti.analyse.utils.CommonUtils;
 import com.chouti.analyse.utils.TimeUtils;
 import com.chouti.analyse.utils.UrlUtils;
 import org.slf4j.Logger;
@@ -181,7 +182,8 @@ public class SimhashManagerService {
                 }
                 genNewsSimhash(news);
                 if (!StringUtils.isEmpty(news.getSimhash())) {
-                    compareNewsHash(news);
+                    Integer repeateType = compareNewsHash(news);
+                    genNewsScore(news,repeateType);
                 }
                 nbcClassifierService.compareNewsCategory(news);
             }
@@ -206,13 +208,16 @@ public class SimhashManagerService {
         }
     }
 
-
-    public void compareNewsHash(News news) {
+    /**
+     * 是否重复新闻(0-不重复,1-完全相同新闻,2-重复新闻)
+     * @param news
+     * @return
+     */
+    public Integer compareNewsHash(News news) {
         try {
-            long newsId = news.getId();
             String hash = news.getSimhash();
             if (StringUtils.isEmpty(hash)) {
-                return;
+                return 0;
             }
 
             for (Map<String, Long> codeMap : allSimHashList) {
@@ -223,8 +228,8 @@ public class SimhashManagerService {
                     //重复新闻
                     if (d <= CommonParams.MIN_HM_DISTACE_LEN && d >= 0) {
                         Long id = codeMap.get(code);
-                        repeatNews(news, id);
-                        return;
+                        Integer repeate = repeatNews(news, id);
+                        return repeate;
                     }
                 }
             }
@@ -235,7 +240,49 @@ public class SimhashManagerService {
         } catch (Exception err) {
             logger.error("比较hash异常:", err);
         }
+        return 0;
 
+    }
+
+    /**
+     * 重复新闻计算新闻分值
+     * @param news
+     * @param repeateType
+     */
+    public void genNewsScore(News news,Integer repeateType){
+        if(null == news || null == repeateType || repeateType <= 1){
+            return;
+        }
+        long now = System.currentTimeMillis();
+        NewsScore newsScore = newsMapper.queryNewsScoreById(news.getId());
+        if(null == newsScore){
+            Double score = CommonUtils.calculateScoreForNews(news.getCreateTime(),2l);
+            newsScore = new NewsScore();
+            newsScore.setCreateTime(now);
+            newsScore.setUpdateTime(now);
+            newsScore.setNewsId(news.getId());
+            newsScore.setScore(score);
+            newsScore.setVote(2);
+            Integer result = newsMapper.insertNewsScore(newsScore);
+            if(null == result || result <= 0){
+                logger.error("插入新闻分值记录失败:"+news.getId());
+            }
+        }else{
+            Integer votes = newsScore.getVote();
+            if(null == votes || votes <= 0){
+                votes =2;
+            }else{
+                votes+=1;
+            }
+            Double score = CommonUtils.calculateScoreForNews(news.getCreateTime(),votes.longValue());
+            newsScore.setUpdateTime(now);
+            newsScore.setScore(score);
+            newsScore.setVote(votes);
+            Integer result = newsMapper.updateNewsScore(newsScore);
+            if(null == result || result <= 0){
+                logger.error("更新新闻分值记录失败:"+news.getId());
+            }
+        }
     }
 
     /**
@@ -244,23 +291,23 @@ public class SimhashManagerService {
      * @param news
      * @param oriNewsId
      */
-    public void repeatNews(News news, Long oriNewsId) {
+    public Integer repeatNews(News news, Long oriNewsId) {
         if (null == news || null == oriNewsId || oriNewsId <= 0 || oriNewsId == news.getId()) {
-            return;
+            return 0;
         }
         //更新news表表示重复新闻
         Integer result = newsMapper.updateNewsRepeat(news.getId(), 1);
         if (null == result || result <= 0) {
             logger.error("更新news repeat 失败");
-            return;
+            return 0;
         }
 
         News oriNews = newsMapper.queryNewsById(oriNewsId);
         if (null == oriNews) {
-            return;
+            return 0;
         }
 
-        Integer sameSource = 0;
+        Integer sameSource = CommonParams.REPEAT_NEWS;
         String newsHost = null;
         String oriHost = null;
         if (!StringUtils.isEmpty(oriNews.getUrl()) && !StringUtils.isEmpty(news.getUrl())) {
@@ -268,7 +315,7 @@ public class SimhashManagerService {
             newsHost = UrlUtils.getNewsHost(news.getUrl());
         }
         if (!StringUtils.isEmpty(oriHost) && !StringUtils.isEmpty(newsHost) && oriHost.equals(newsHost)) {
-            sameSource = 1;
+            sameSource = CommonParams.REPEAT_NEWS_SAMESOURCE;
         }
         RepeatModel repeatModel = new RepeatModel();
         repeatModel.setNewsId(oriNewsId);
@@ -279,12 +326,30 @@ public class SimhashManagerService {
         repeatModel.setSameSource(sameSource);
         Long result1 = newsMapper.queryRepeateNewsById(oriNewsId, news.getId());
         if (null != result1 && result1 > 0) {
-            return;
+            return 0;
         }
         Integer result2 = newsMapper.insertRepeatNews(repeatModel);
         if (null == result2 || result2 <= 0) {
             logger.error("添加repeat news 失败");
         }
+        NewsRepeatCount repeatCount = newsMapper.queryNewsRepeatCount(oriNewsId);
+        if(null == repeatCount){
+            repeatCount = new NewsRepeatCount();
+            repeatCount.setNewsId(oriNewsId);
+            repeatCount.setCreateTime(now);
+            repeatCount.setUpdateTime(now);
+            repeatCount.setCount(1);
+            repeatCount.setRepeatNewids(news.getId()+"");
+            newsMapper.insertNewsRepeatCount(repeatCount);
+        }else{
+            String repeatNewids = repeatCount.getRepeatNewids();
+            repeatNewids +=","+news.getId()+"";
+            repeatCount.setCount(repeatCount.getCount()+1);
+            repeatCount.setRepeatNewids(repeatNewids);
+            repeatCount.setUpdateTime(now);
+            newsMapper.updateNewsRepeatCount(repeatCount);
+        }
+        return sameSource;
 
     }
 

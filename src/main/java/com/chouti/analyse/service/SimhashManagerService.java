@@ -183,8 +183,7 @@ public class SimhashManagerService {
                 }
                 genNewsSimhash(news);
                 if (!StringUtils.isEmpty(news.getSimhash())) {
-                    Integer repeateType = compareNewsHash(news);
-                    genNewsScore(news,repeateType);
+                    compareNewsHash(news);
                 }
                 nbcClassifierService.compareNewsCategory(news);
             }
@@ -214,11 +213,11 @@ public class SimhashManagerService {
      * @param news
      * @return
      */
-    public Integer compareNewsHash(News news) {
+    public void compareNewsHash(News news) {
         try {
             String hash = news.getSimhash();
             if (StringUtils.isEmpty(hash)) {
-                return 0;
+                return ;
             }
 
             for (Map<String, Long> codeMap : allSimHashList) {
@@ -230,7 +229,8 @@ public class SimhashManagerService {
                     if (d <= CommonParams.MIN_HM_DISTACE_LEN && d >= 0) {
                         Long id = codeMap.get(code);
                         Integer repeate = repeatNews(news, id);
-                        return repeate;
+                        genNewsScore(repeate,id);
+                        return;
                     }
                 }
             }
@@ -241,32 +241,34 @@ public class SimhashManagerService {
         } catch (Exception err) {
             logger.error("比较hash异常:", err);
         }
-        return 0;
 
     }
 
     /**
      * 重复新闻计算新闻分值
-     * @param news
      * @param repeateType
      */
-    public void genNewsScore(News news,Integer repeateType){
-        if(null == news || null == repeateType || repeateType <= 1){
+    public void genNewsScore(Integer repeateType,Long oriNewsId){
+        if(null == repeateType || repeateType <= 1 || null == oriNewsId || oriNewsId <= 0){
+            return;
+        }
+        News oriNews = newsMapper.queryNewsById(oriNewsId);
+        if (null == oriNews) {
             return;
         }
         long now = System.currentTimeMillis();
-        NewsScore newsScore = newsMapper.queryNewsScoreById(news.getId());
+        NewsScore newsScore = newsMapper.queryNewsScoreById(oriNewsId);
         if(null == newsScore){
-            Double score = CommonUtils.calculateScoreForNews(news.getCreateTime(),2l);
+            Double score = CommonUtils.calculateScoreForNews(oriNews.getCreateTime(),2l);
             newsScore = new NewsScore();
             newsScore.setCreateTime(now);
             newsScore.setUpdateTime(now);
-            newsScore.setNewsId(news.getId());
+            newsScore.setNewsId(oriNewsId);
             newsScore.setScore(score);
             newsScore.setVote(2);
             Integer result = newsMapper.insertNewsScore(newsScore);
             if(null == result || result <= 0){
-                logger.error("插入新闻分值记录失败:"+news.getId());
+                logger.error("插入新闻分值记录失败:"+oriNews.getId());
             }
         }else{
             Integer votes = newsScore.getVote();
@@ -275,13 +277,13 @@ public class SimhashManagerService {
             }else{
                 votes+=1;
             }
-            Double score = CommonUtils.calculateScoreForNews(news.getPublishTime(),votes.longValue());
+            Double score = CommonUtils.calculateScoreForNews(oriNews.getPublishTime(),votes.longValue());
             newsScore.setUpdateTime(now);
             newsScore.setScore(score);
             newsScore.setVote(votes);
             Integer result = newsMapper.updateNewsScore(newsScore);
             if(null == result || result <= 0){
-                logger.error("更新新闻分值记录失败:"+news.getId());
+                logger.error("更新新闻分值记录失败:"+oriNews.getId());
             }
         }
     }
@@ -293,7 +295,7 @@ public class SimhashManagerService {
      * @param oriNewsId
      */
     public Integer repeatNews(News news, Long oriNewsId) {
-        if (null == news || null == oriNewsId || oriNewsId <= 0 || oriNewsId == news.getId()) {
+        if (null == news || null == oriNewsId || oriNewsId <= 0 || oriNewsId.toString().equals(news.getId().toString())) {
             return 0;
         }
         //更新news表表示重复新闻

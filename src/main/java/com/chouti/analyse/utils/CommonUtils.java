@@ -44,7 +44,7 @@ public class CommonUtils {
 
 
     public static void main(String args[]){
-        System.out.println("double1:"+calculateScoreForNews(1480471810000l,2l));
-        System.out.println("double2:"+calculateScoreForNews(1480385410000l,10l));
+        System.out.println("double1:"+calculateMathLog(10d,10d));
+
     }
 }

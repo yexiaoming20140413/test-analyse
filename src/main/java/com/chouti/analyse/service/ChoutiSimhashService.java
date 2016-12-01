@@ -56,7 +56,7 @@ public class ChoutiSimhashService {
 
     }
 
-    public int getHMDistance(String str1, String str2) {
+    public static int getHMDistance(String str1, String str2) {
         if (StringUtils.isEmpty(str1) || StringUtils.isEmpty(str2)) {
             return -1;
         }
@@ -75,6 +75,11 @@ public class ChoutiSimhashService {
             logger.error("getTermsArray 分词异常："+err);
         }
         return null;
+    }
+
+    public static void main(String args[]){
+        int d = getHMDistance("1111111010010100110111001011000111110011011001001111110101010100","0110110101010010000110100000001110101101101000110100110011000100");
+        System.out.println("d:"+d);
     }
 
 }

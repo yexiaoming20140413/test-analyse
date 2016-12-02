@@ -1,5 +1,7 @@
 package com.chouti.analyse.utils;
 
+import com.chouti.analyse.configure.CommonParams;
+
 /*******************************************************************************
  * Copyright (c) 2005-2016 Gozap, Inc.
  * Contributors:
@@ -20,14 +22,14 @@ public class CommonUtils {
         if (v.equals(0d)) {
             // 清零时以当前时间为基准时间
             basetime = System.currentTimeMillis();
-            double t = (createTime - basetime) / (86400d * 1000);
+            double t = (createTime - basetime) / (CommonParams.NEWS_SCORE_TIME_RANGE);
             return t;
         }
 
-        double t = (createTime - basetime) / (86400d * 1000);
+        double t = (createTime - basetime) / (CommonParams.NEWS_SCORE_TIME_RANGE);
         System.out.println("t:"+t);
         // t = t + Math.log10(upsWithWeight);
-        t = t + calculateMathLog(v, 5);
+        t = t + calculateMathLog(v, CommonParams.NEWS_SCORE_VOTE_RANGE);
         return t;
     }
 

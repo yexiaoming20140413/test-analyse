@@ -188,7 +188,7 @@ public class ChoutiTrainService {
     private static List<IgCategoryModel> igCategoryModelList = new ArrayList<>();
 
 
-    public void genCategoryIgWords() throws Exception{
+    public void genCategoryIgWords(){
         logger.info("IG分类特征词选取开始");
         long startTime = System.currentTimeMillis();
 
@@ -219,69 +219,74 @@ public class ChoutiTrainService {
     }
 
 
-    public void saveCagegoryIgWords() throws Exception{
+    public void saveCagegoryIgWords() {
 
-        for(int i = 0;i < igCategoryModelList.size();i++){
-            double d = 0.0;
-            IgCategoryModel igCategoryModel = igCategoryModelList.get(i);
-            List<IgWordModel> igWordModelList = igCategoryModel.getIgWordModelList();
-            String categoryWordFreFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_PRIFIX+igCategoryModel.getCategoryId()+".dat";
+        try{
+            for(int i = 0;i < igCategoryModelList.size();i++){
+                double d = 0.0;
+                IgCategoryModel igCategoryModel = igCategoryModelList.get(i);
+                List<IgWordModel> igWordModelList = igCategoryModel.getIgWordModelList();
+                String categoryWordFreFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_PRIFIX+igCategoryModel.getCategoryId()+".dat";
 //            String categoryWordWeightFile = SOUGO_NEWS_FILE_PATH + CommonParams.CATEGORY_WORD_FEATURE_IG_WEIGHT_PRIFIX+igCategoryModel.getCategoryId()+".dat";
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordFreFile), "UTF-8"));
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordFreFile), "UTF-8"));
 //            BufferedWriter bw1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryWordWeightFile), "UTF-8"));
-            Map<String,Integer> wordsMap = null;
-            Integer categoryDocNum = 0;
-            if(!CollectionUtils.isEmpty(igWordModelList)){
-                Integer categoryId = igCategoryModel.getCategoryId();
-                for(NbcWordsMap nbcWordsMap: allCategoryWordList){
-                    if(nbcWordsMap.getCategoryId() == categoryId){
-                        wordsMap = nbcWordsMap.getNbcPositiveMap();
-                        categoryDocNum = nbcWordsMap.getCategoryDocNum();
-                        break;
+                Map<String,Integer> wordsMap = null;
+                Integer categoryDocNum = 0;
+                if(!CollectionUtils.isEmpty(igWordModelList)){
+                    Integer categoryId = igCategoryModel.getCategoryId();
+                    for(NbcWordsMap nbcWordsMap: allCategoryWordList){
+                        if(nbcWordsMap.getCategoryId() == categoryId){
+                            wordsMap = nbcWordsMap.getNbcPositiveMap();
+                            categoryDocNum = nbcWordsMap.getCategoryDocNum();
+                            break;
+                        }
                     }
-                }
-                bw.write(categoryDocNum+"");
-                bw.newLine();
-                int index = 0;
-                int maxWordNum = 0;
-                double maxWeight = 0.0;
-                for(IgWordModel igWordModel:igWordModelList){
-                    index ++;
+                    bw.write(categoryDocNum+"");
+                    bw.newLine();
+                    int index = 0;
+                    int maxWordNum = 0;
+                    double maxWeight = 0.0;
+                    for(IgWordModel igWordModel:igWordModelList){
+                        index ++;
 //                    if(index > CommonParams.CATEGORY_FEATURE_WORD_LEN){
 //                        break;
 //                    }
 
-                    String word = igWordModel.getWord();
-                    Integer num = wordsMap.get(word);
-                    if(num == null){
-                        continue;
-                    }
-                    if(maxWordNum == 0){
-                        maxWordNum = num;
-                        maxWeight = igWordModel.getInfoGain();
-                    }
-                    Double weightNum = (igWordModel.getInfoGain()/maxWeight)*maxWordNum;
+                        String word = igWordModel.getWord();
+                        Integer num = wordsMap.get(word);
+                        if(num == null){
+                            continue;
+                        }
+                        if(maxWordNum == 0){
+                            maxWordNum = num;
+                            maxWeight = igWordModel.getInfoGain();
+                        }
+                        Double weightNum = (igWordModel.getInfoGain()/maxWeight)*maxWordNum;
 
 //                    bw1.write(word);
 //                    bw1.newLine();
 //                    bw1.write(weightNum.intValue()+" "+igWordModel.getInfoGain()+"");
 //                    bw1.newLine();
 
-                    bw.write(word);
-                    bw.newLine();
+                        bw.write(word);
+                        bw.newLine();
 
 //                    bw.write(num+"");
-                    Integer intNum = weightNum.intValue();
-                    if(intNum == 0){
-                        intNum = 1;
+                        Integer intNum = weightNum.intValue();
+                        if(intNum == 0){
+                            intNum = 1;
+                        }
+                        bw.write(intNum+"");
+                        bw.newLine();
                     }
-                    bw.write(intNum+"");
-                    bw.newLine();
                 }
-            }
-            bw.close();
+                bw.close();
 //            bw1.close();
+            }
+        }catch(Exception err){
+            logger.error("saveCagegoryIgWords err",err);
         }
+
     }
 
 
@@ -405,35 +410,39 @@ public class ChoutiTrainService {
     }
 
     //统计每个分类词出现文档次数
-    public void statisticalCategoryWordDocNums(int i) throws Exception{
-        String categoryFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryFile), "UTF-8"));
-        String line;
-        Map<String,Integer> wordDocNums = new HashMap<>();
-        N1 = 0;
-        while ((line = br.readLine()) != null) {
-            Map<String,Integer> wordsMap =  choutiSegment.segmentFrequency(line,ChoutiSegment.SEGMENT_TYPE_NBC);
-            if(null == wordsMap){
-                continue;
-            }
-            for (Iterator iterator = wordsMap.entrySet().iterator(); iterator.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                String word = (String) entry.getKey();
-                if(wordDocNums.containsKey(word)){
-                    wordDocNums.put(word,wordDocNums.get(word)+1);
-                }else{
-                    wordDocNums.put(word,1);
+    public void statisticalCategoryWordDocNums(int i){
+        try{
+            String categoryFile = CHOUTI_NEWS_FILE_PATH + CommonParams.CATEGORY_NEWS_FILE_PRIFIX+i+".dat";
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(categoryFile), "UTF-8"));
+            String line;
+            Map<String,Integer> wordDocNums = new HashMap<>();
+            N1 = 0;
+            while ((line = br.readLine()) != null) {
+                Map<String,Integer> wordsMap =  choutiSegment.segmentFrequency(line,ChoutiSegment.SEGMENT_TYPE_NBC);
+                if(null == wordsMap){
+                    continue;
                 }
+                for (Iterator iterator = wordsMap.entrySet().iterator(); iterator.hasNext(); ) {
+                    Map.Entry entry = (Map.Entry) iterator.next();
+                    String word = (String) entry.getKey();
+                    if(wordDocNums.containsKey(word)){
+                        wordDocNums.put(word,wordDocNums.get(word)+1);
+                    }else{
+                        wordDocNums.put(word,1);
+                    }
+                }
+                N1 ++;
             }
-            N1 ++;
+            IgCategoryModel igCategoryModel = new IgCategoryModel();
+            igCategoryModel.setCategoryId(i);
+            igCategoryModel.setN1(N1);
+            igCategoryModel.setWordDocNumMap(wordDocNums);
+            igCategoryModelList.add(igCategoryModel);
+            br.close();
+        }catch(Exception err){
+            logger.error("statisticalCategoryWordDocNums err",err);
         }
-        IgCategoryModel igCategoryModel = new IgCategoryModel();
-        igCategoryModel.setCategoryId(i);
-        igCategoryModel.setN1(N1);
-        igCategoryModel.setWordDocNumMap(wordDocNums);
-        igCategoryModelList.add(igCategoryModel);
-        br.close();
+
 
     }
 

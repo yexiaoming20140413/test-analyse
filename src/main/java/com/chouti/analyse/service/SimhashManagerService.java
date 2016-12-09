@@ -259,7 +259,7 @@ public class SimhashManagerService {
         long now = System.currentTimeMillis();
         NewsScore newsScore = newsMapper.queryNewsScoreById(oriNewsId);
         if(null == newsScore){
-            Double score = CommonUtils.calculateScoreForNews(oriNews.getCreateTime(),2l);
+            Double score = CommonUtils.calculateScoreForNews(oriNews.getPublishTime(),2l);
             newsScore = new NewsScore();
             newsScore.setCreateTime(now);
             newsScore.setUpdateTime(now);

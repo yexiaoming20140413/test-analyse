@@ -67,11 +67,11 @@ public class CommonParams {
     /**
      * 计算新闻热度分值时间因子刻度
      */
-    public static Double NEWS_SCORE_TIME_RANGE= 10800d * 1000;
+    public static Double NEWS_SCORE_TIME_RANGE= 3600d* 2 * 1000;
     /**
      * 计算新闻热度推荐数因子刻度
      */
-    public static Double NEWS_SCORE_VOTE_RANGE=3d;
+    public static Double NEWS_SCORE_VOTE_RANGE=5d;
 
 
 

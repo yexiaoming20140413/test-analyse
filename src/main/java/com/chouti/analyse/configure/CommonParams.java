@@ -71,7 +71,7 @@ public class CommonParams {
     /**
      * 计算新闻热度推荐数因子刻度
      */
-    public static Double NEWS_SCORE_VOTE_RANGE=5d;
+    public static Double NEWS_SCORE_VOTE_RANGE=3d;
 
 
 

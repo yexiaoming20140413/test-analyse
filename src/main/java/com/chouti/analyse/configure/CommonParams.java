@@ -23,7 +23,7 @@ public class CommonParams {
     /**
      * 文本相似海明最佳距离
      */
-    public static int MIN_HM_DISTACE_LEN=3;
+    public static int MIN_HM_DISTACE_LEN=5;
     /**
      * 初始化simhash map 数据库分页大小
      */

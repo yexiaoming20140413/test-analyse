@@ -14,6 +14,8 @@ public class LoadWords {
     private static List<String> loadKeyWordList = new ArrayList<>();
     private static final String SOU_GOU_CI_KU_FILE_PATH ="/home/xiaoming/docs/ciku/";
     private static final String NLP_CIKU_FILE_PATH="/home/xiaoming/newsLearn/data/";
+
+    private static final String MY_DICTORY_WORDS_FILE_PATH="/home/xiaoming/Downloads/hanlp/HanLP-1.3.1/data/dictionary/custom/myDictionary.txt";
     private static Map<String,Integer> wordsMap = new HashMap<String,Integer>();
     public static void initKeyWordList(){
         loadKeyWordList.add("足球");
@@ -30,8 +32,7 @@ public class LoadWords {
     }
     public static void main(String args[]) throws Exception {
         initKeyWordList();
-        String writeFilePath = "/home/xiaoming/Downloads/hanlp/HanLP-1.3.1/data/dictionary/custom/myDictionary.txt";
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(writeFilePath), "UTF-8"));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(MY_DICTORY_WORDS_FILE_PATH), "UTF-8"));
         File file = new File(NLP_CIKU_FILE_PATH);
         if (file.isDirectory()) {
             String[] files = file.list();

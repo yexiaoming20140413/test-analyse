@@ -127,7 +127,7 @@ public class TestClass {
      * @return
      */
     public static Integer compareNewsCategory(String content){
-        content="感恩节丨愿你被这世界温柔相待 感恩节 安永校招 · 2016-11-28 10:01 上周的感恩节活动中 小伙伴们发来的祝福，字字句句都情真意切 让安永君觉得每一天的工作都意义非凡 下面一起来分享一下童鞋们的感恩祝福吧~ 篇幅有限，感恩无限，还有许许多多温暖的祝福，安永君就不一一列出了，再次感谢所有的小伙伴们，谢谢大家一直以来的热情支持！感恩有你，快快行动起来，向你们爱的人，大声说出感恩祝福吧！ 安永校招(gh_50727fb089d8)";
+        content="广东省东莞市公安局官方微博截图 　　中新网12月2日电 据广东省东莞市公安局官方微博消息，东莞市公安局今日召开新闻发布会，通报2016年10月27日，东莞市长安镇发生一男子追砸运钞车被押运员开枪击中致死案的侦办情况。经东莞警方深入侦查，在死者黄某第一次打砸运钞车前，双方行进路线没有交集，排除运钞车与黄某发生过碰撞、摩擦的情况。";
         Integer nearCategoryId = null;
         for(int i = 0;i < allCategoryWordList.size();i++){
             NbcWordsMap nbcWordsMap = allCategoryWordList.get(i);

@@ -1,10 +1,7 @@
 package com.chouti.analyse.train;
 
-import com.chouti.analyse.configure.CommonParams;
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /*******************************************************************************
  * Copyright (c) 2005-2016 Gozap, Inc.
@@ -15,7 +12,9 @@ public class LoadWords {
 
     //明星 足球
     private static List<String> loadKeyWordList = new ArrayList<>();
-
+    private static final String SOU_GOU_CI_KU_FILE_PATH ="/home/xiaoming/docs/ciku/";
+    private static final String NLP_CIKU_FILE_PATH="/home/xiaoming/newsLearn/data/";
+    private static Map<String,Integer> wordsMap = new HashMap<String,Integer>();
     public static void initKeyWordList(){
         loadKeyWordList.add("足球");
         loadKeyWordList.add("明星");
@@ -31,10 +30,9 @@ public class LoadWords {
     }
     public static void main(String args[]) throws Exception {
         initKeyWordList();
-        String readFilePath = "/home/xiaoming/newsLearn/data";
         String writeFilePath = "/home/xiaoming/Downloads/hanlp/HanLP-1.3.1/data/dictionary/custom/myDictionary.txt";
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(writeFilePath), "UTF-8"));
-        File file = new File(readFilePath);
+        File file = new File(NLP_CIKU_FILE_PATH);
         if (file.isDirectory()) {
             String[] files = file.list();
             for (String name : files) {
@@ -48,7 +46,7 @@ public class LoadWords {
                 if(!load){
                     continue;
                 }
-                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("/home/xiaoming/newsLearn/data/" + name), "UTF-8"));
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(NLP_CIKU_FILE_PATH + name), "UTF-8"));
                 String line;
                 while ((line = br.readLine()) != null) {
                     bw.write(line);
@@ -56,6 +54,29 @@ public class LoadWords {
                 }
                 br.close();
             }
+        }
+
+        File cikuFile = new File(SOU_GOU_CI_KU_FILE_PATH);
+        if (cikuFile.isDirectory()) {
+            String[] files = cikuFile.list();
+            for (String name : files) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(SOU_GOU_CI_KU_FILE_PATH + name), "UTF-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if(wordsMap.containsKey(line)){
+                        continue;
+                    }
+                    wordsMap.put(line,1);
+                }
+                br.close();
+            }
+        }
+
+        for (Iterator iterator = wordsMap.entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            String word = (String) entry.getKey();
+            bw.write(word);
+            bw.newLine();
         }
         bw.close();
     }

@@ -1,0 +1,46 @@
+image: registry.gozap.com/maven:3.3-jdk-8
+
+before_script:
+  - pwd
+  - env
+
+stages:
+  - test
+  - build
+
+docker-dev:
+  stage: build
+  script:
+    - mvn -B -f pom.xml clean install docker:build docker:tag -P docker-dev -pl chouti-analyse -Dmaven.test.skip=true
+  only:
+    - master
+  tags:
+    - chouti-dohko #指定波塞冬这台机器
+
+
+#直接在线上打包
+make-product:
+  variables:
+    JAVA_HOME: /data/tmp/build/jdk1.8
+    M2_HOME: /data/tmp/build/apache-maven-3.3.9
+    M2: $M2_HOME/bin
+    MAVEN_OPTS: -Xms256m -Xmx512m
+  stage: build
+  script:
+    - export PATH=$PATH:$M2_HOME/bin
+    - mvn install -P www  -Dmaven.test.skip=true
+  only:
+    - master
+  tags:
+    - chouti-www
+  when: manual
+
+
+#直接在线上打包
+make-product-docker:
+  stage: build
+  script:
+    - mvn -B -f pom.xml clean install docker:build docker:tag -P docker-www -pl chouti-analyse -Dmaven.test.skip=true
+  tags:
+    - chouti-prod-53
+  when: manual
